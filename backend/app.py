@@ -394,6 +394,14 @@ def create_species():
         e = f"Invalid or missing mandatory field(s). Scientific Name, Common Name, Leaf Type and Fruit type must be a non null string: {', '.join(errors)}"
         return jsonify({"error": str(e)}), 400
 
+# adding duplicate check
+    excisting=supabase.table('species_en')\
+        .select("species_id")\
+        .eq("scientific_name", ç)\
+        .execute()
+    
+    if excisting.data:
+        return jsonify({"Error the scientific name'{scientific_name}' is already there"}),409
 
     rollback_id = None
 
