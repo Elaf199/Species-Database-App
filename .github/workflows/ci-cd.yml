@@ -3,13 +3,64 @@ name: CI Pipeline
 on:
   workflow_dispatch:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "DevSecOps" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "DevSecOps" ]
 
 jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Python security scan (Safety)
+        run: |
+          pip install safety
+          safety check --file requirements.txt --output json || true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Node.js dependencies
+        run: |
+          npm install
+
+      - name: Run npm audit
+        run: npm audit --audit-level moderate || true
+
+      - name: Run Snyk security scan (if token available)
+        uses: snyk/actions/python@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --file=requirements.txt
+
+      - name: Run TruffleHog for secrets scanning
+        uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
+        with:
+          path: ./
+          base: main
+          head: HEAD
+          extra_args: --debug --only-verified
+
   validate-repo:
     runs-on: ubuntu-latest
+    needs: security-scan
 
     steps:
       - name: Checkout repository
@@ -17,3 +68,8 @@ jobs:
 
       - name: List repository contents
         run: ls -la
+
+      - name: Run basic tests (if any)
+        run: |
+          # Add test commands here, e.g., python -m pytest if tests exist
+          echo "No tests configured yet"
