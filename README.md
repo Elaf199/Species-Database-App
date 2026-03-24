@@ -44,6 +44,17 @@ This application is built to be robust, intuitive, and highly functional in the 
 
 ---
 
+## Security & CI/CD
+
+This project implements automated security scanning to ensure code quality and dependency safety:
+
+- **Security Scanning:** Uses SNYK for vulnerability detection in Python dependencies, along with Safety checks and npm audit for Node.js packages.
+- **Secrets Scanning:** TruffleHog is used to detect potential secrets in the codebase.
+- **CI Pipeline:** Security scans run automatically on pushes and pull requests to the `master` and `DevSecOps` branches, or can be triggered manually.
+- **Vulnerability Reporting:** See [SECURITY.md](SECURITY.md) for information on reporting security vulnerabilities.
+
+---
+
 ## Setup & Running
 
 The project has three components that need to be set up and run separately. Follow the steps below for each.
