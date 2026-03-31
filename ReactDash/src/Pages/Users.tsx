@@ -33,8 +33,15 @@ interface SnackbarState {
 }
 
 export default function Users() {
-  const [lang, setLang] = useState<"en" | "tet">("en");
+  const [lang, setLang] = useState<"en" | "tet">(
+    (localStorage.getItem("lang") as "en" | "tet") || "en"
+  );
   const t = translations[lang];
+
+  const changeLang = (newLang: "en" | "tet") => {
+    localStorage.setItem("lang", newLang);
+    setLang(newLang);
+  };
 
   const [rows, setRows] = useState<User[]>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -346,13 +353,15 @@ export default function Users() {
         alignItems="center"
         mb={2}
       >
-        <h2 style={{ margin: 0 }}>{t.userManagement}</h2>
+        <h2 className="text-3xl font-bold" style={{ margin: 0 }}>
+          {t.userManagement}
+        </h2>
 
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <button onClick={() => setLang("en")} style={{ marginRight: "10px" }}>
+          <button onClick={() => changeLang("en")} style={{ marginRight: "10px" }}>
             EN
           </button>
-          <button onClick={() => setLang("tet")}>TET</button>
+          <button onClick={() => changeLang("tet")}>TET</button>
 
           <Button
             variant="contained"

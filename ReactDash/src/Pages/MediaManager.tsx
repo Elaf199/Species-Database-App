@@ -14,8 +14,15 @@ type Media = {
 }
 
 export default function MediaManager() {
-    const [lang, setLang] = useState<"en" | "tet">("en")
+    const [lang, setLang] = useState<"en" | "tet">(
+        (localStorage.getItem("lang") as "en" | "tet") || "en"
+    )
     const t = translations[lang]
+    
+    const changeLang = (newLang: "en" | "tet") => {
+        localStorage.setItem("lang", newLang)
+        setLang(newLang)
+    }
 
     const [media, setMedia] = useState<Media[]>([])
     const [loading, setLoading] = useState(false)
@@ -187,15 +194,15 @@ export default function MediaManager() {
                     mb: 2,
                 }}
             >
-                <h2>{t.mediaManagement}</h2>
+               <h2 className="text-3xl font-bold">{t.mediaManagement}</h2>
 
                 <div>
-                    <button onClick={() => setLang("en")} style={{ marginRight: "10px" }}>
-                        EN
-                    </button>
-                    <button onClick={() => setLang("tet")} style={{ marginRight: "10px" }}>
-                        TET
-                    </button>
+                <button onClick={() => changeLang("en")} style={{ marginRight: "10px" }}>
+    EN
+</button>
+<button onClick={() => changeLang("tet")} style={{ marginRight: "10px" }}>
+    TET
+</button>
 
                     <Button variant="contained" onClick={addMedia}>
                         {t.addMedia}

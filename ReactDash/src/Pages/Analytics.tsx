@@ -40,8 +40,15 @@ type UserAnalytics = {
 const API_URL = import.meta.env.VITE_API_BASE;
 
 export default function Analytics() {
-  const [lang, setLang] = useState<"en" | "tet">("en");
+  const [lang, setLang] = useState<"en" | "tet">(
+    (localStorage.getItem("lang") as "en" | "tet") || "en"
+  );
   const t = translations[lang];
+
+  const changeLang = (newLang: "en" | "tet") => {
+    localStorage.setItem("lang", newLang);
+    setLang(newLang);
+  };
 
   const [overview, setOverview] = useState<Overview | null>(null);
   const [users, setUsers] = useState<UserAnalytics[]>([]);
@@ -69,18 +76,14 @@ export default function Analytics() {
 
   return (
     <Box p={5}>
-      {/* Language buttons */}
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-        <button onClick={() => setLang("en")} style={{ marginRight: 10 }}>
-          EN
-        </button>
-        <button onClick={() => setLang("tet")}>TET</button>
-      </Box>
+      <div className="flex justify-between mb-4 items-center">
+  <h2 className="text-3xl font-bold">{t.analyticsDashboard}</h2>
 
-      <Typography variant="h4" align="center" gutterBottom>
-        {t.analyticsDashboard}
-      </Typography>
-
+  <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+    <button onClick={() => changeLang("en")}>EN</button>
+    <button onClick={() => changeLang("tet")}>TET</button>
+  </div>
+</div>
       <Typography align="center" mb={5}>
         {t.analyticsDescription}
       </Typography>

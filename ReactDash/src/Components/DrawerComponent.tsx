@@ -33,7 +33,9 @@ export default function DrawerComponent({
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
-  const [lang, setLang] = React.useState<"en" | "tet">("en")
+  const [lang, setLang] = React.useState<"en" | "tet">(
+    (localStorage.getItem("lang") as "en" | "tet") || "en"
+  )
 const t = translations[lang]
 
   const [menuTrigger, setMenuTrigger] = React.useState<HTMLElement | null>(null);
