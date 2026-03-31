@@ -137,6 +137,16 @@ def get_species_changes():
         .execute()
     )
 
+    # if the changes is none then there is failure in the database query
+    if changes.data is None:
+        return jsonify({
+        "error": "sync_failed",
+        "stage": "changelog_fetch",
+        "message": " changelog data fail to fetch it",
+        "details": str(changes.error.message) if changes.error else None,
+        "since_version": since_version
+    }), 500
+
     #if nothing changes, client must be up to date
     if not changes.data:
         return jsonify({
