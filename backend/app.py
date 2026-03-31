@@ -256,7 +256,13 @@ def get_species_incremental():
     )
 
     if species_en.data is None or species_tet.data is None:
-        return jsonify({"error": "failed to fetch incremental species"}), 500
+        return jsonify({
+            "error": "sync failed",
+            "stage":"species_fetch",
+            "message":"failed to get the species from the database",
+            "since_version":since_version
+        }), 500
+        
     deleted_ids = [
         row["entity_id"]
         for row in changes.data
