@@ -1,4 +1,3 @@
-import TheDrawer from '../Components/drawer'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import React, { useEffect, useState } from 'react'
@@ -44,22 +43,23 @@ const errorContainerSx = {
 
 const bigFieldSx = {
     '& .MuiInputBase-input': {
-      fontSize: '1.1rem',
+        fontSize: '1.1rem',
     },
     '& .MuiInputLabel-root': {
-      fontSize: '1rem',
+        fontSize: '1rem',
     },
     '& .MuiFormHelperText-root': {
-      fontSize: '0.9rem',
-      color: 'red',
-    }, 
+        fontSize: '0.9rem',
+        color: 'red',
+    },
 }
 
 export function EditEntry() {
     const { id } = useParams<{ id: string }>()
 
-    const lang: "en" | "tet" =
-        localStorage.getItem("lang") === "tet" ? "tet" : "en"
+    const [lang, setLang] = useState<"en" | "tet">(
+        (localStorage.getItem("lang") as "en" | "tet") || "en"
+    )
     const t = translations[lang]
 
     const [error, setError] = useState('')
@@ -109,6 +109,11 @@ export function EditEntry() {
 
     const [, setTetumRowError] = useState(false)
     const [open, setOpen] = useState(false)
+
+    const changeLang = (newLang: "en" | "tet") => {
+        localStorage.setItem("lang", newLang)
+        setLang(newLang)
+    }
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -454,8 +459,14 @@ export function EditEntry() {
 
     return (
         <>
-            <div><TheDrawer /></div>
-            <h1>{t.editExistingEntry}</h1>
+            <div className="flex justify-between mb-4 items-center">
+                <h2 className="text-3xl font-bold">{t.editExistingEntry}</h2>
+
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                    <button onClick={() => changeLang("en")}>EN</button>
+                    <button onClick={() => changeLang("tet")}>TET</button>
+                </div>
+            </div>
 
             <Box sx={containerBoxSx}>
                 {status && (

@@ -1,4 +1,3 @@
-import TheDrawer from '../Components/drawer'
 import MainTableSelect from '../mainTableSelect'
 import MainTableSelectTetum from '../mainTableSelectTetum'
 import { useState } from 'react'
@@ -41,13 +40,11 @@ export function Home() {
     }
 
     return (
-        <>
-            <div><TheDrawer /></div>
+        <div>
+            <div className="flex justify-between mb-4 items-center">
+                <h2 className="text-3xl font-bold">{t.speciesDashboard}</h2>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h1>{t.speciesDashboard}</h1>
-
-                <div>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                     <button onClick={() => setLang("en")} style={{ marginRight: "10px" }}>
                         EN
                     </button>
@@ -104,6 +101,6 @@ export function Home() {
                     />
                 </Box>
             )}
-        </>
+        </div>
     )
 }

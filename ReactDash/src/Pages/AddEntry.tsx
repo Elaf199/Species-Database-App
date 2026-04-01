@@ -1,4 +1,3 @@
-import TheDrawer from '../Components/drawer'
 import { TextField } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -280,11 +279,10 @@ const t = translations[lang];
 
     return (
         <Box width="100%">
-            <div><TheDrawer /></div>
-
-            <Box display="flex" justifyContent="space-between" alignItems="center" px={2}>
-                <h1>{t.addSpecies}</h1>
-                <div>
+            <div className="flex justify-between mb-4 items-center">
+                <h2 className="text-3xl font-bold">{t.addSpecies}</h2>
+    
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                     <button onClick={() => setLang("en")} style={{ marginRight: "10px" }}>
                         EN
                     </button>
@@ -292,8 +290,8 @@ const t = translations[lang];
                         TET
                     </button>
                 </div>
-            </Box>
-
+            </div>
+    
             <Box width="100%" maxWidth={900} mx="auto" mt={3} px={2}>
                 <Box display="flex" gap={2} mb={2} justifyContent="center">
                     <TextField
@@ -310,7 +308,7 @@ const t = translations[lang];
                                 : ""
                         }
                     />
-
+    
                     <TextField
                         sx={{ ...bigFieldSx, maxWidth: 280 }}
                         label={t.commonName}
@@ -326,7 +324,7 @@ const t = translations[lang];
                         }
                     />
                 </Box>
-
+    
                 <Box display="flex" gap={2} mb={2} justifyContent="center">
                     <TextField
                         sx={{ ...bigFieldSx, maxWidth: 280 }}

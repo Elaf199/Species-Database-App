@@ -1,4 +1,9 @@
 import { useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+} from "@mui/material";
 import { adminFetch } from "../utils/adminFetch";
 import { translations } from "../translations";
 
@@ -42,18 +47,28 @@ export default function Audit() {
   }
 
   return (
-    <div style={{ padding: 24 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>{t.auditReport}</h1>
-        <div>
-          <button onClick={() => setLang("en")} style={{ marginRight: "10px" }}>
-            EN
-          </button>
-          <button onClick={() => setLang("tet")}>
-            TET
-          </button>
-        </div>
-      </div>
+    <Box p={5}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
+        flexWrap="wrap"
+        gap={2}
+      >
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          sx={{ fontSize: { xs: "1.8rem", md: "2.5rem" } }}
+        >
+          {t.auditReport}
+        </Typography>
+
+        <Box display="flex" gap={1.5}>
+    <button onClick={() => setLang("en")}>EN</button>
+    <button onClick={() => setLang("tet")}>TET</button>
+  </Box>
+</Box>
 
       <input
         type="file"
@@ -61,23 +76,26 @@ export default function Audit() {
         onChange={(e) => setFile(e.target.files?.[0] ?? null)}
       />
 
-      <button
+      <Button
+        variant="contained"
         onClick={runAudit}
         disabled={!file || loading}
-        style={{ marginLeft: 10 }}
+        sx={{ ml: 1.5 }}
       >
         {loading ? t.running : t.runAudit}
-      </button>
+      </Button>
 
       {result?.status === "error" && (
-        <p style={{ marginTop: 16, color: "salmon" }}>
+        <Typography sx={{ mt: 2, color: "salmon" }}>
           {t.error}: {result.error}
-        </p>
+        </Typography>
       )}
 
       {result?.status === "success" && result.report && (
-        <div style={{ marginTop: 24 }}>
-          <h3>{t.summary}</h3>
+        <Box mt={3}>
+          <Typography variant="h6" mb={1}>
+            {t.summary}
+          </Typography>
           <ul>
             <li>{t.totalRows}: {result.report.rows}</li>
             <li>{t.emptyRows}: {result.report.empty_rows}</li>
@@ -85,7 +103,9 @@ export default function Audit() {
             <li>{t.blockers}: {result.report.has_blockers ? t.yes : t.no}</li>
           </ul>
 
-          <h3>{t.missingValuesByColumn}</h3>
+          <Typography variant="h6" mt={3} mb={1}>
+            {t.missingValuesByColumn}
+          </Typography>
           <ul>
             {Object.entries(result.report.missing_values_by_column)
               .filter(([, v]: any) => v > 0)
@@ -96,7 +116,9 @@ export default function Audit() {
               ))}
           </ul>
 
-          <h3>{t.duplicateScientificNames}</h3>
+          <Typography variant="h6" mt={3} mb={1}>
+            {t.duplicateScientificNames}
+          </Typography>
           {result.report.duplicates_count > 0 ? (
             <ul>
               {result.report.duplicate_scientific_names.map((n: string) => (
@@ -104,10 +126,12 @@ export default function Audit() {
               ))}
             </ul>
           ) : (
-            <p>{t.noDuplicateScientificNames}</p>
+            <Typography>{t.noDuplicateScientificNames}</Typography>
           )}
 
-          <h3>{t.invalidLeafTypes}</h3>
+          <Typography variant="h6" mt={3} mb={1}>
+            {t.invalidLeafTypes}
+          </Typography>
           {result.report.leaf_type_invalid_values.length > 0 ? (
             <ul>
               {result.report.leaf_type_invalid_values.map((v: string) => (
@@ -115,10 +139,12 @@ export default function Audit() {
               ))}
             </ul>
           ) : (
-            <p>{t.noInvalidLeafType}</p>
+            <Typography>{t.noInvalidLeafType}</Typography>
           )}
 
-          <h3>{t.invalidFruitTypes}</h3>
+          <Typography variant="h6" mt={3} mb={1}>
+            {t.invalidFruitTypes}
+          </Typography>
           {result.report.fruit_type_invalid_values.length > 0 ? (
             <ul>
               {result.report.fruit_type_invalid_values.map((v: string) => (
@@ -126,7 +152,7 @@ export default function Audit() {
               ))}
             </ul>
           ) : (
-            <p>{t.noInvalidFruitType}</p>
+            <Typography>{t.noInvalidFruitType}</Typography>
           )}
 
           <details style={{ marginTop: 16 }}>
@@ -142,8 +168,8 @@ export default function Audit() {
               {JSON.stringify(result.report, null, 2)}
             </pre>
           </details>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
