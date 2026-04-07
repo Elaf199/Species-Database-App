@@ -425,11 +425,11 @@ def create_species():
 # adding duplicate check
     excisting=supabase.table('species_en')\
         .select("species_id")\
-        .eq("scientific_name", ç)\
+        .eq("scientific_name",scientific_name )\
         .execute()
     
     if excisting.data:
-        return jsonify({"Error the scientific name'{scientific_name}' is already there"}),409
+        return jsonify({"error":f"Error the scientific name'{scientific_name}' is already there"}),409
 
     rollback_id = None
 
