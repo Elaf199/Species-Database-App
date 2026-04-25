@@ -84,6 +84,8 @@ def get_admin_user(supabase):
     expires_at = datetime.fromisoformat(session["expires_at"])
 
     if datetime.now(timezone.utc) > expires_at:
+        ### Task 4
+        handle_expired_admin_session(supabase, token, session["user_id"])
         return None, ("token expired", 401)
     
     #check that admin still exists
@@ -107,7 +109,27 @@ def get_admin_user(supabase):
         return None, ("not admin acoount", 403)
     
     return session["user_id"], None
-    
+
+########## TASK 4
+def log_auth_event(supabase, user_id, event_type):
+    try:
+        supabase.table("analytics").insert({
+            "user_id": user_id,
+            "event_type": event_type,
+            "login_time": datetime.utcnow().isoformat()
+            }).execute()
+    except Exception as e:
+        print(f"Auth event logging failed: {e}")
+
+######### TASK 4
+def handle_expired_admin_session(supabase, token, user_id):
+    log_auth_event(supabase, user_id, "SESSION_EXPIRED")
+    (
+        supabase.table("admin_sessions")
+        .update({"revoked": True})
+        .eq("access_token", token)
+        .execute()
+    )
 
 #####TOKEN HELPERS (FOR ADMINS)
 def generate_token():
@@ -276,6 +298,9 @@ def register_auth_routes(app, supabase):
             "revoked": False
         }).execute()
 
+        ### Task 4
+        log_auth_event(supabase, user["user_id"], "LOGIN")
+
         return jsonify({
             "access_token": token,
             "expires_in": 2400
@@ -336,6 +361,9 @@ def register_auth_routes(app, supabase):
             "revoked": False
         }).execute()
 
+        ### Task 4
+        log_auth_event(supabase, user["user_id"], "LOGIN")
+
         return jsonify({
             "access_token": token,
             "expires_in": 2400
@@ -381,7 +409,11 @@ def register_auth_routes(app, supabase):
         expires_at = datetime.fromisoformat(session["expires_at"])
         #Compare current time (UTC) with expiry time
         if datetime.now(timezone.utc) > expires_at:
+            handle_expired_admin_session(supabase, token, session["user_id"])
             return jsonify({"error": "token expired"}), 401
+
+        ### Task 4
+        log_auth_event(supabase, session["user_id"], "LOGOUT")
 
         # Revoke the session
         (
