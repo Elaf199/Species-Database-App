@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS public.analytics (
     event_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     login_time TIMESTAMP NOT NULL,
-    duration INT NOT NULL,
+    event_type TEXT,
+    duration INT,
     location VARCHAR(255),
     CONSTRAINT analytics_user_id_fkey
       FOREIGN KEY (user_id)
