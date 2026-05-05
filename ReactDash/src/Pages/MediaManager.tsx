@@ -31,23 +31,48 @@ type Media = {
 function ThumbCell({ url, type }: { url: string; type: string }) {
   const [err, setErr] = useState(false);
   const [previewing, setPreviewing] = useState(false);
+  const [lang, setLang] = useState(localStorage.getItem("lang") || "en");
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  useEffect(() => {
+    if (url) {
+      setErr(false);
+      setStatus("loading");
+    }
+  }, [url]);
 
   if (!url) {
     return (
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          gap: 6,
-          color: "#9ca3af",
-          fontSize: 12,
+          justifyContent: "center",
+          gap: 2,
+          height: "100%",
         }}
       >
-        <ImageIcon sx={{ fontSize: 16 }} /> No media
+        <div
+          style={{
+            width: 64,
+            height: 64,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 8,
+            border: "1px dashed #d1d5db",
+            backgroundColor: "#f9fafb",
+            color: "#9ca3af",
+            fontSize: 10,
+          }}
+        >
+          <ImageIcon sx={{ fontSize: 18 }} />
+          <span>No media</span>
+        </div>
       </div>
     );
   }
-
   if (type === "video") {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -69,52 +94,65 @@ function ThumbCell({ url, type }: { url: string; type: string }) {
     );
   }
 
-  if (err) {
-    return (
-      <div
-        style={{
-          width: 48,
-          height: 48,
-          borderRadius: 8,
-          backgroundColor: "#f3f4f6",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px dashed #d1d5db",
-        }}
-      >
-        <ImageIcon sx={{ color: "#d1d5db", fontSize: 20 }} />
-      </div>
-    );
-  }
-
   return (
     <>
-      <img
-        src={url}
-        alt="media preview"
-        onError={() => setErr(true)}
-        onClick={() => setPreviewing(true)}
-        style={{
-          width: 48,
-          height: 48,
-          objectFit: "cover",
-          borderRadius: 8,
-          border: "1px solid #d8edbd",
-          cursor: "zoom-in",
-          transition: "transform 0.15s, box-shadow 0.15s",
-          display: "block",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLImageElement).style.transform = "scale(1.08)";
-          (e.currentTarget as HTMLImageElement).style.boxShadow =
-            "0 4px 16px rgba(0,0,0,0.18)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLImageElement).style.transform = "scale(1)";
-          (e.currentTarget as HTMLImageElement).style.boxShadow = "none";
-        }}
-      />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+        <img
+          src={url}
+          alt="media preview"
+          onLoad={() => setStatus("success")}
+          onError={() => {
+            setErr(true);
+            setStatus("error");
+          }}
+          onClick={() => setPreviewing(true)}
+          style={{
+            width: 64,
+            height: 64,
+            objectFit: "cover",
+            borderRadius: 8,
+            border: "1px solid #d8edbd",
+            cursor: "zoom-in",
+            transition: "transform 0.15s, box-shadow 0.15s",
+            display: "block",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLImageElement).style.transform = "scale(1.08)";
+            (e.currentTarget as HTMLImageElement).style.boxShadow =
+              "0 4px 16px rgba(0,0,0,0.18)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLImageElement).style.transform = "scale(1)";
+            (e.currentTarget as HTMLImageElement).style.boxShadow = "none";
+          }}
+        />
+
+        <div style={{ fontSize: 9, textAlign: "center", lineHeight: 1 }}>
+          {status === "loading" && "⏳"}
+          {status === "success" && "✅"}
+          {status === "error" && "❌"}
+        </div>
+
+        {status === "error" && (
+          <button
+            onClick={() => {
+              setErr(false);
+              setStatus("loading");
+            }}
+            style={{
+              fontSize: 10,
+              padding: "2px 6px",
+              borderRadius: 6,
+              border: "1px solid #d8edbd",
+              background: "#ffffff",
+              cursor: "pointer",
+            }}
+          >
+            Retry
+          </button>
+        )}
+      </div>
+      {/* Lightbox */}
       {previewing && (
         <div
           onClick={() => setPreviewing(false)}
@@ -156,7 +194,7 @@ function TypeBadge({ type }: { type: string }) {
         gap: 5,
         padding: "3px 10px",
         borderRadius: 20,
-        fontSize: 11,
+        fontSize: 9,
         fontWeight: 700,
         letterSpacing: "0.04em",
         textTransform: "uppercase",
@@ -261,24 +299,18 @@ function DeleteDialog({
 
 /* ─── Main component ────────────────────────────────────────────── */
 export default function MediaManager() {
-  const [media, setMedia] = useState<Media[]>([]);
+  const [lang, setLang] = useState<"en" | "tet">(
+    (localStorage.getItem("lang") as "en" | "tet") || "en"
+  );
+  
+  const t = (key: string) => (translations as any)[key]?.[lang] || key;  const [media, setMedia] = useState<Media[]>([]);
   const [filtered, setFiltered] = useState<Media[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [addHovered, setAddHovered] = useState(false);
 
-  const [lang, setLang] = useState<"en" | "tet">(
-    (localStorage.getItem("lang") as "en" | "tet") || "en"
-  );
-  const t = (key: string) =>
-    (translations as any)[key]?.[lang] || key;
-
-  const changeLang = (newLang: "en" | "tet") => {
-    localStorage.setItem("lang", newLang);
-    setLang(newLang);
-  };
-
+  // delete dialog state
   const [deleteTarget, setDeleteTarget] = useState<Media | null>(null);
 
   const API_URL = import.meta.env.VITE_API_BASE;
@@ -292,11 +324,11 @@ export default function MediaManager() {
     setFiltered(
       q
         ? media.filter(
-            (m) =>
-              m.species_name?.toLowerCase().includes(q) ||
-              m.media_type?.toLowerCase().includes(q) ||
-              m.alt_text?.toLowerCase().includes(q),
-          )
+          (m) =>
+            m.species_name?.toLowerCase().includes(q) ||
+            m.media_type?.toLowerCase().includes(q) ||
+            m.alt_text?.toLowerCase().includes(q),
+        )
         : media,
     );
   }, [search, media]);
@@ -306,7 +338,7 @@ export default function MediaManager() {
     setError(null);
     try {
       const res = await adminFetch(`${API_URL}/upload-media`, {});
-      if (!res.ok) throw new Error(t("failedToLoadMedia"));
+      if (!res.ok) throw new Error("Failed to load media");
       const data = await res.json();
       setMedia(Array.isArray(data) ? data : []);
     } catch (err: any) {
@@ -332,7 +364,7 @@ export default function MediaManager() {
 
   const saveMedia = async (row: Media) => {
     if (!row.species_name || !row.media_type || !row.download_link) {
-      setError(t("mediaRequiredFields"));
+      setError("Species name, type and URL are required");
       return row;
     }
     const isNew = row.media_id < 0;
@@ -349,8 +381,8 @@ export default function MediaManager() {
       if (!res.ok) {
         const err = await res.json();
         if (res.status === 409)
-          throw new Error(t("mediaLinkAlreadyRegistered"));
-        throw new Error(err.error || t("uploadFailed"));
+          throw new Error("This media link is already registered");
+        throw new Error(err.error || "Upload failed");
       }
       await fetchMedia();
     } catch (err: any) {
@@ -375,7 +407,7 @@ export default function MediaManager() {
       );
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || t("deleteFailed"));
+        throw new Error(err.error || "Delete failed");
       }
       await fetchMedia();
     } catch (err: any) {
@@ -388,7 +420,7 @@ export default function MediaManager() {
   const columns: GridColDef[] = [
     {
       field: "preview",
-      headerName: t("media"),
+      headerName: "Preview",
       width: 80,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
@@ -402,14 +434,14 @@ export default function MediaManager() {
     },
     {
       field: "media_id",
-      headerName: t("id"),
+      headerName: "ID",
       width: 70,
       valueGetter: (_value: any, row: Media) =>
-        row.media_id < 0 ? t("new") : row.media_id,
+        row.media_id < 0 ? "New" : row.media_id,
     },
     {
       field: "species_name",
-      headerName: t("speciesName"),
+      headerName: "Species Name",
       width: 200,
       editable: true,
       renderCell: (params: GridRenderCellParams) => (
@@ -426,7 +458,7 @@ export default function MediaManager() {
     },
     {
       field: "media_type",
-      headerName: t("type"),
+      headerName: "Type",
       width: 120,
       editable: true,
       type: "singleSelect",
@@ -440,7 +472,7 @@ export default function MediaManager() {
     },
     {
       field: "download_link",
-      headerName: t("mediaUrl"),
+      headerName: "Media URL",
       flex: 1,
       minWidth: 260,
       editable: true,
@@ -462,7 +494,7 @@ export default function MediaManager() {
     },
     {
       field: "alt_text",
-      headerName: t("altText"),
+      headerName: "Alt Text",
       width: 180,
       editable: true,
       renderCell: (params: GridRenderCellParams) => (
@@ -489,133 +521,146 @@ export default function MediaManager() {
     <div
       style={{
         padding: "28px 36px",
+
         backgroundColor: "#f7fbf2",
         fontFamily: "'DM Sans', sans-serif",
       }}
     >
+
       {/* ── Header ── */}
-      <div
+<div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 16,
+    marginBottom: 24,
+  }}
+>
+  <div>
+    <div
+      style={{
+        width: 36,
+        height: 4,
+        borderRadius: 4,
+        background: "linear-gradient(90deg,#2d6a0a,#86b85a)",
+        marginBottom: 8,
+      }}
+    />
+
+    <h1
+      style={{
+        fontSize: 26,
+        fontWeight: 700,
+        color: "#1a2e10",
+        margin: 0,
+        letterSpacing: "-0.02em",
+      }}
+    >
+      {t("media")}
+    </h1>
+
+    <p
+      style={{
+        fontSize: 13,
+        color: "#7a9464",
+        marginTop: 4,
+        fontWeight: 400,
+      }}
+    >
+      {media.length} {t("items")} · {imageCount} {t("images")} · {videoCount}{" "}
+      {t("videos")}
+    </p>
+  </div>
+
+  <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: 8,
+        padding: 4,
+        borderRadius: 10,
+        border: "1px solid #d8edbd",
+        backgroundColor: "#eef6e6",
+      }}
+    >
+      <button
+        onClick={() => {
+          localStorage.setItem("lang", "en");
+          setLang("en");
+        }}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          gap: 16,
-          marginBottom: 24,
+          padding: "8px 22px",
+          border: "none",
+          borderRadius: 7,
+          fontSize: 13,
+          fontWeight: 600,
+          fontFamily: "'DM Sans', sans-serif",
+          cursor: "pointer",
+          transition: "all 0.18s",
+          color: lang === "en" ? "#2d6a0a" : "#7a9464",
+          background: lang === "en" ? "#ffffff" : "transparent",
+          boxShadow:
+            lang === "en" ? "0 1px 6px rgba(45,106,10,0.12)" : "none",
         }}
       >
-        <div>
-          <div
-            style={{
-              width: 36,
-              height: 4,
-              borderRadius: 4,
-              background: "linear-gradient(90deg,#2d6a0a,#86b85a)",
-              marginBottom: 8,
-            }}
-          />
-          <h1
-            style={{
-              fontSize: 26,
-              fontWeight: 700,
-              color: "#1a2e10",
-              margin: 0,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            {t("mediaManagement")}
-          </h1>
-          <p
-            style={{
-              fontSize: 13,
-              color: "#7a9464",
-              marginTop: 4,
-              fontWeight: 400,
-            }}
-          >
-            {media.length} items · {imageCount} {t("image").toLowerCase()}s · {videoCount} {t("video").toLowerCase()}s
-          </p>
-        </div>
+        🌿 {t("english")}
+      </button>
 
-        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-          <div
-            style={{
-              display: "flex",
-              gap: 4,
-              background: "#eef7e6",
-              border: "1px solid #d0eab8",
-              borderRadius: 10,
-              padding: 4,
-            }}
-          >
-            <button
-              onClick={() => changeLang("en")}
-              style={{
-                padding: "8px 22px",
-                border: "none",
-                borderRadius: 7,
-                fontSize: 13,
-                fontWeight: 600,
-                fontFamily: "'DM Sans', sans-serif",
-                cursor: "pointer",
-                transition: "all 0.18s",
-                color: lang === "en" ? "#2d6a0a" : "#7a9464",
-                background: lang === "en" ? "#ffffff" : "transparent",
-                boxShadow: lang === "en" ? "0 1px 6px rgba(45,106,10,0.12)" : "none",
-              }}
-            >
-              🌿 {t("english")}
-            </button>
+      <button
+        onClick={() => {
+          localStorage.setItem("lang", "tet");
+          setLang("tet");
+        }}
+        style={{
+          padding: "8px 22px",
+          border: "none",
+          borderRadius: 7,
+          fontSize: 13,
+          fontWeight: 600,
+          fontFamily: "'DM Sans', sans-serif",
+          cursor: "pointer",
+          transition: "all 0.18s",
+          color: lang === "tet" ? "#2d6a0a" : "#7a9464",
+          background: lang === "tet" ? "#ffffff" : "transparent",
+          boxShadow:
+            lang === "tet" ? "0 1px 6px rgba(45,106,10,0.12)" : "none",
+        }}
+      >
+        🌏 {t("tetum")}
+      </button>
+    </div>
 
-            <button
-              onClick={() => changeLang("tet")}
-              style={{
-                padding: "8px 22px",
-                border: "none",
-                borderRadius: 7,
-                fontSize: 13,
-                fontWeight: 600,
-                fontFamily: "'DM Sans', sans-serif",
-                cursor: "pointer",
-                transition: "all 0.18s",
-                color: lang === "tet" ? "#2d6a0a" : "#7a9464",
-                background: lang === "tet" ? "#ffffff" : "transparent",
-                boxShadow: lang === "tet" ? "0 1px 6px rgba(45,106,10,0.12)" : "none",
-              }}
-            >
-              🌏 {t("tetum")}
-            </button>
-          </div>
-
-          <button
-            onClick={addMedia}
-            onMouseEnter={() => setAddHovered(true)}
-            onMouseLeave={() => setAddHovered(false)}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              padding: "9px 18px",
-              borderRadius: 10,
-              border: "none",
-              backgroundColor: addHovered ? "#245508" : "#2d6a0a",
-              color: "#ffffff",
-              fontSize: 13,
-              fontWeight: 600,
-              fontFamily: "inherit",
-              cursor: "pointer",
-              boxShadow: addHovered
-                ? "0 4px 14px rgba(45,106,10,0.35)"
-                : "0 2px 8px rgba(45,106,10,0.2)",
-              transform: addHovered ? "translateY(-1px)" : "translateY(0)",
-              transition: "all 0.15s",
-            }}
-          >
-            <AddIcon sx={{ fontSize: 17 }} />
-            {t("addMedia")}
-          </button>
-        </div>
-      </div>
+    <button
+      onClick={addMedia}
+      onMouseEnter={() => setAddHovered(true)}
+      onMouseLeave={() => setAddHovered(false)}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 7,
+        padding: "9px 18px",
+        borderRadius: 10,
+        border: "none",
+        backgroundColor: addHovered ? "#245508" : "#2d6a0a",
+        color: "#ffffff",
+        fontSize: 13,
+        fontWeight: 600,
+        fontFamily: "inherit",
+        cursor: "pointer",
+        boxShadow: addHovered
+          ? "0 4px 14px rgba(45,106,10,0.35)"
+          : "0 2px 8px rgba(45,106,10,0.2)",
+        transform: addHovered ? "translateY(-1px)" : "translateY(0)",
+        transition: "all 0.15s",
+      }}
+    >
+      <AddIcon sx={{ fontSize: 17 }} />
+      {t("addMedia")}
+    </button>
+  </div>
+</div>
 
       {/* ── Search ── */}
       <div
@@ -635,7 +680,7 @@ export default function MediaManager() {
         <SearchIcon sx={{ fontSize: 18, color: "#86b85a" }} />
         <input
           type="text"
-          placeholder={`${t("search")} ${t("species").toLowerCase()}, ${t("type").toLowerCase()}, ${t("altText").toLowerCase()}...`}
+          placeholder="Search species, type, alt text…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
@@ -700,7 +745,7 @@ export default function MediaManager() {
           getRowId={(row) => row.media_id}
           loading={loading}
           editMode="row"
-          rowHeight={68}
+          rowHeight={95}
           processRowUpdate={async (row) => {
             await saveMedia(row);
             return row;
