@@ -44,6 +44,85 @@ This application is built to be robust, intuitive, and highly functional in the 
 
 ---
 
+## Admin Authentication and Session Security
+
+The application includes a secure Admin authentication system with advanced session management features designed to protect administrative access.
+
+### Architecture Overview
+
+- **Single Active Session Policy:** Each Admin user can have only one active session at a time. New logins automatically revoke previous sessions.
+- **Token-Based Authentication:** Admins use short-lived access tokens (40 minutes) and longer-lived refresh tokens (7 days) for secure, stateless authentication.
+- **Refresh Token Rotation:** Refresh tokens are rotated on each use to prevent reuse attacks.
+- **Session Revocation:** Sessions are immediately invalidated on logout, expiry, or replacement.
+- **Audit Logging:** All authentication events are logged to both the audit history and analytics systems.
+
+### Authentication Flow
+
+1. **Login:** Admin provides credentials (password or Google OAuth).
+2. **Session Creation:** System revokes any existing active sessions, generates access/refresh tokens, stores hashed refresh token.
+3. **Token Usage:** Access tokens are sent in Authorization header for API requests.
+4. **Refresh:** When access token expires, use refresh token to obtain new tokens.
+5. **Logout:** Revokes current session and refresh token.
+
+### Session Metadata
+
+Each Admin session tracks:
+- Admin user ID
+- Session ID
+- Access token issue/expiry timestamps
+- Refresh token issue/expiry timestamps
+- Last activity timestamp
+- IP address
+- User agent
+- Session status (active/revoked)
+- Revocation reason (logout/expired/new_login/refresh_expired)
+- Event type (login/logout/refresh/expiry/failed_login/session_replacement/refresh_expired)
+
+### Authentication Events
+
+Events logged include:
+- **admin_login:** Successful login
+- **admin_logout:** User logout
+- **admin_refresh:** Token refresh
+- **admin_failed_login:** Failed login attempt
+- **expiry:** Session expired
+- **session_replacement:** Previous session revoked due to new login
+- **refresh_expired:** Refresh token expired
+
+### API Endpoints
+
+- `POST /api/auth/admin-login` - Password login
+- `POST /api/auth/google-admin` - Google OAuth login
+- `POST /api/auth/admin-logout` - Logout
+- `POST /api/auth/admin-refresh` - Refresh tokens
+- `GET /api/admin/session-audit` - View session audit history
+
+### Security Controls
+
+- Refresh tokens stored as bcrypt hashes (not plaintext)
+- Tokens never logged in full
+- IP and User-Agent tracking for security monitoring
+- Automatic session expiry and revocation
+- Failed login logging for anomaly detection
+
+### Configuration
+
+- Access token expiry: 40 minutes
+- Refresh token expiry: 7 days
+- Hashing: bcrypt with salt
+- Database: PostgreSQL via Supabase
+
+### Test Procedure
+
+1. Login as Admin user
+2. Verify single session enforcement (login from another device revokes first)
+3. Test token refresh before expiry
+4. Attempt access with expired/revoked tokens
+5. Check audit logs for all events
+6. Verify analytics integration
+
+---
+
 ## Security & CI/CD
 
 This project implements automated security scanning to ensure code quality and dependency safety:
