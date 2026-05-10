@@ -30,7 +30,7 @@ async function renderSpecies(data) {
       <div class="species-item" onclick="goToDetail('${id}')">
       ${
         thumb
-        ? `<img src="${thumb}" alt="${scientific}" class="species-card-img">`
+        ? `<img data-thumb="${thumb}" data-species-id="${id}" alt="${scientific}" class="species-card-img cached-thumb">`
         : ``
       }  
       <div class="species-content">
@@ -48,7 +48,13 @@ async function renderSpecies(data) {
       </div>
     `;
   }
-  speciesList.innerHTML = html
+  speciesList.innerHTML = html;
+  document.querySelectorAll(".cached-thumb").forEach((img) => {
+    const url = img.dataset.thumb;
+    const speciesId = img.dataset.speciesId;
+
+    loadImageWithCache(img, url, speciesId);
+  });
 }
 
 
