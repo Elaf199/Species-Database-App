@@ -12,6 +12,30 @@ Designed specifically for the challenging remote environments of Timor-Leste, th
 
 ---
 
+## Developer Onboarding
+
+1. Copy `.env.example` to `.env` and fill the Supabase and Google values.
+2. Run the installer for your OS:
+   - Linux: `npm run install:linux`
+   - macOS: `npm run install:macos`
+   - Windows 11: `npm run install:windows11`
+3. Start the Docker environment: `npm run dev`
+
+Local services:
+
+- Admin dashboard: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
+
+Common commands:
+
+- `npm run dev:admin` starts the Vite admin dashboard.
+- `npm run dev:backend` starts the Flask backend.
+- `npm run build` builds the admin dashboard.
+- `npm run lint` runs admin dashboard linting.
+- `npm run docker:down` stops the Docker environment.
+
+---
+
 ## Rai Matak
 
 *Rai Matak* translates to **"Green Land"** or **"Lush Earth"** in Tetum, reflecting the program's vital mission to restore Timor-Leste's natural biodiversity and forest cover.
