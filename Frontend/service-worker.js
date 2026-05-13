@@ -1,6 +1,6 @@
 // service-worker.js - PWA Offline Support
-const CACHE_NAME = "species-app-v3";
-const MEDIA_CACHE = "media-cache-v3";
+const CACHE_NAME = "species-app-v5";
+const MEDIA_CACHE = "media-cache-v5";
 
 const CORE_ASSETS = [
   "./index.html",
@@ -16,6 +16,7 @@ const CORE_ASSETS = [
   "./scripts/config.js",
   "./scripts/db.js",
   "./scripts/dataService.js",
+  "./scripts/imageCache.js",
   "./scripts/sync.js",
   "./scripts/specieslist.js",
   "./scripts/filterCarousel.js",
@@ -24,6 +25,7 @@ const CORE_ASSETS = [
   "./js/general.js",
   "./Assets/icons/leftarrow.png",
   "./Assets/icons/heart.png",
+  "./Assets/icons/videoCloudIcon.png",
 ];
 
 // Install - cache core assets
@@ -67,6 +69,9 @@ self.addEventListener("activate", (event) => {
 // Fetch - serve from cache, fallback to network
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+
+  //Ignore blob URLs (URL's temporary and cannot be used on multiple pages)
+  if (url.protocol === "blob:") {return;}
 
   // Handle Supabase storage URLs (images/videos)
   if (event.request.destination === "image" || event.request.destination === "video") {
