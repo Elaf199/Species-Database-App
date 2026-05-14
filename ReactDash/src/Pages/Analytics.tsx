@@ -16,6 +16,9 @@ import SpaIcon from "@mui/icons-material/Spa";
 import ImageIcon from "@mui/icons-material/Image";
 import { adminFetch } from "../utils/adminFetch";
 import { translations } from "../translations";
+import LanguageToggle from "../Components/LanguageToggle";
+import { useLanguage } from "../LanguageContext";
+
 
 import {
   LineChart,
@@ -51,16 +54,9 @@ type UserAnalytics = {
 const API_URL = import.meta.env.VITE_API_BASE;
 
 export default function Analytics() {
-  const [lang, setLang] = useState<"en" | "tet">(
-    (localStorage.getItem("lang") as "en" | "tet") || "en"
-  );
-  const t = (key: string) =>
-    (translations as any)[key]?.[lang] || key;
+  const { lang, setLang } = useLanguage();
 
-  const changeLang = (newLang: "en" | "tet") => {
-    localStorage.setItem("lang", newLang);
-    setLang(newLang);
-  };
+  const t = (key: string) => (translations as any)[key]?.[lang] || key;
 
   const [overview, setOverview] = useState<Overview | null>(null);
   const [users, setUsers] = useState<UserAnalytics[]>([]);
@@ -86,8 +82,6 @@ export default function Analytics() {
     );
   }
 
-  // Demo chart data for time-based analytics
-  // Existing cards and user activity still use real backend data
   const activeUsersTrend = [
     { date: "Mon", users: 10 },
     { date: "Tue", users: 11 },
@@ -105,71 +99,81 @@ export default function Analytics() {
   ];
 
   return (
-    <Box p={5}>
-      <div className="flex justify-between mb-4 items-center">
-  <h2 className="text-3xl font-bold">{t("analyticsDashboard")}</h2>
-
-  <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-    <button onClick={() => changeLang("en")}>EN</button>
-    <button onClick={() => changeLang("tet")}>TET</button>
-  </div>
-</div>
-      <Typography align="center" mb={5}>
-      {t("analyticsDescription")}
+    <Box
+      sx={{
+        p: "28px 36px",
+        backgroundColor: "#f7fbf2",
+        fontFamily: "'DM Sans', sans-serif",
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
+        flexWrap="wrap"
+        gap={2}
+      >
+        <Box>
+          <Box
+            sx={{
+              width: 36,
+              height: 4,
+              borderRadius: 4,
+              background: "linear-gradient(90deg,#2d6a0a,#86b85a)",
+              mb: 1,
+            }}
+          />
+  
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            sx={{ color: "#1a2e10", fontSize: { xs: "1.8rem", md: "2.5rem" } }}
+          >
+            {t("analyticsDashboard")}
+          </Typography>
+        </Box>
+  
+      </Box>
+  
+      <Typography align="center" mb={5} sx={{ color: "#7a9464" }}>
+        {t("analyticsDescription")}
       </Typography>
-
-      {/* OVERVIEW */}
+  
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
         gap={3}
         mb={6}
       >
-        <StatCard
-          icon={<PeopleIcon />}
-          label={t("totalUsers")}
-          value={overview?.total_users}
-        />
-        <StatCard
-          icon={<CheckCircleIcon />}
-          label={t("activeUsers")}
-          value={overview?.active_users}
-        />
-        <StatCard
-          icon={<LoginIcon />}
-          label={t("totalLogins")}
-          value={overview?.total_logins}
-        />
-        <StatCard
-          icon={<TimerIcon />}
-          label={t("avgSession")}
-          value={overview?.average_session_duration}
-        />
-        <StatCard
-          icon={<SpaIcon />}
-          label={t("totalSpecies")}
-          value={overview?.total_species}
-        />
-        <StatCard
-          icon={<ImageIcon />}
-          label={t("speciesWithMedia")}
-          value={overview?.species_with_media}
-        />
+        <StatCard icon={<PeopleIcon />} label={t("totalUsers")} value={overview?.total_users} />
+        <StatCard icon={<CheckCircleIcon />} label={t("activeUsers")} value={overview?.active_users} />
+        <StatCard icon={<LoginIcon />} label={t("totalLogins")} value={overview?.total_logins} />
+        <StatCard icon={<TimerIcon />} label={t("avgSession")} value={overview?.average_session_duration} />
+        <StatCard icon={<SpaIcon />} label={t("totalSpecies")} value={overview?.total_species} />
+        <StatCard icon={<ImageIcon />} label={t("speciesWithMedia")} value={overview?.species_with_media} />
       </Box>
-
-      {/* CHARTS */}
+  
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(320px, 1fr))"
         gap={3}
         mb={6}
       >
-        <Card elevation={4}>
+        <Card
+          elevation={0}
+          sx={{
+            border: "1px solid #d8edbd",
+            borderRadius: 3,
+            boxShadow: "0 2px 12px rgba(45,106,10,0.07)",
+          }}
+        >
           <CardContent>
-            <Typography variant="h6" align="center" gutterBottom>
-              Active Users Over Time
+            <Typography variant="h6" align="center" gutterBottom sx={{ color: "#1a2e10", fontWeight: 700 }}>
+              {t("activeUsersOverTime")}
             </Typography>
-
+  
             <Box sx={{ width: "100%", height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={activeUsersTrend}>
@@ -184,13 +188,20 @@ export default function Analytics() {
             </Box>
           </CardContent>
         </Card>
-
-        <Card elevation={4}>
+  
+        <Card
+          elevation={0}
+          sx={{
+            border: "1px solid #d8edbd",
+            borderRadius: 3,
+            boxShadow: "0 2px 12px rgba(45,106,10,0.07)",
+          }}
+        >
           <CardContent>
-            <Typography variant="h6" align="center" gutterBottom>
-              Login Frequency
+            <Typography variant="h6" align="center" gutterBottom sx={{ color: "#1a2e10", fontWeight: 700 }}>
+              {t("loginFrequency")}
             </Typography>
-
+  
             <Box sx={{ width: "100%", height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={loginFrequencyTrend}>
@@ -206,49 +217,49 @@ export default function Analytics() {
           </CardContent>
         </Card>
       </Box>
-
-      <Divider sx={{ mb: 4, borderColor: "white" }} />
-
-      {/* USERS */}
-      <Typography variant="h5" mb={3}>
-      {t("userActivity")}
+  
+      <Divider sx={{ mb: 4, borderColor: "#d8edbd" }} />
+  
+      <Typography variant="h5" mb={3} sx={{ color: "#1a2e10", fontWeight: 700 }}>
+        {t("userActivity")}
       </Typography>
-
+  
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
         gap={3}
       >
         {users.map((user) => (
-          <Card key={user.user_id} elevation={3}>
+          <Card
+            key={user.user_id}
+            elevation={0}
+            sx={{
+              border: "1px solid #d8edbd",
+              borderRadius: 3,
+              boxShadow: "0 2px 12px rgba(45,106,10,0.07)",
+            }}
+          >
             <CardContent>
-              <Typography variant="h6">{user.name}</Typography>
+              <Typography variant="h6" sx={{ color: "#1a2e10", fontWeight: 700 }}>
+                {user.name}
+              </Typography>
+  
               <Typography color="text.secondary">
-              {t("role")}: {user.role}
+                {t("role")}: {user.role}
               </Typography>
-
-              <Divider sx={{ my: 1 }} />
-
+  
+              <Divider sx={{ my: 1, borderColor: "#d8edbd" }} />
+  
+              <Typography>{t("logins")}: {user.login_count}</Typography>
+              <Typography>{t("totalDuration")}: {user.total_duration} min</Typography>
+              <Typography>{t("avgDuration")}: {user.average_duration.toFixed(1)} min</Typography>
+  
               <Typography>
-              {t("logins")}: {user.login_count}
+                {t("lastLogin")}:{" "}
+                {user.last_login ? new Date(user.last_login).toLocaleString() : "—"}
               </Typography>
-              <Typography>
-              {t("totalDuration")}: {user.total_duration} min
-              </Typography>
-              <Typography>
-              {t("avgDuration")}: {user.average_duration.toFixed(1)} min
-              </Typography>
-              <Typography>
-              {t("lastLogin")}:{" "}
-                {user.last_login
-                  ? new Date(user.last_login).toLocaleString()
-                  : "—"}
-              </Typography>
-
-              <Typography
-                mt={1}
-                color={user.is_active ? "success.main" : "error.main"}
-              >
+  
+              <Typography mt={1} color={user.is_active ? "success.main" : "error.main"}>
                 {user.is_active ? t("active") : t("inactive")}
               </Typography>
             </CardContent>
@@ -257,24 +268,35 @@ export default function Analytics() {
       </Box>
     </Box>
   );
-}
 
-function StatCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value?: number;
-}) {
-  return (
-    <Card elevation={4}>
-      <CardContent sx={{ textAlign: "center" }}>
-        <Box fontSize={40}>{icon}</Box>
-        <Typography variant="h5">{value ?? "—"}</Typography>
-        <Typography color="text.secondary">{label}</Typography>
-      </CardContent>
-    </Card>
-  );
+  function StatCard({
+    icon,
+    label,
+    value,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    value?: number;
+  }) {
+    return (
+      <Card
+        elevation={0}
+        sx={{
+          border: "1px solid #d8edbd",
+          borderRadius: 3,
+          boxShadow: "0 2px 12px rgba(45,106,10,0.07)",
+        }}
+      >
+        <CardContent sx={{ textAlign: "center" }}>
+          <Box fontSize={40} sx={{ color: "#2d6a0a" }}>
+            {icon}
+          </Box>
+          <Typography variant="h5" sx={{ color: "#1a2e10", fontWeight: 700 }}>
+            {value ?? "—"}
+          </Typography>
+          <Typography color="text.secondary">{label}</Typography>
+        </CardContent>
+      </Card>
+    );
+  }
 }
