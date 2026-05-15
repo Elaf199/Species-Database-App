@@ -1,8 +1,28 @@
+//Gets a safe URL (dfeinitely from the proper DB) instead of a user-provided value (could be malicious) which trips up GitHub's security check
+function getSafeVideoUrl(rawUrl) {
+    try {
+        const url = new URL(rawUrl);
+
+        const allowedHost = "oppcngtkhywxsazeqqet.supabase.co";
+        const allowedPath = "/storage/v1/object/public/media/videos/";
+
+        if (url.protocol !== "https:") {return null;}
+        if (url.hostname !== allowedHost) {return null;}
+        if (!url.pathname.startsWith(allowedPath)) {return null;}
+        //Make sure its a video file
+        const validVideoFile = /\.(mp4|webm|mov)$/i.test(url.pathname);
+        if (!validVideoFile) {return null;}
+
+        return url.href;
+    } catch {return null;}
+}
+
+
 // ------------------------------
 // CONFIG
 // ------------------------------
 const params = new URLSearchParams(window.location.search)
-const VIDEO_SRC = params.get("media")
+const VIDEO_SRC = getSafeVideoUrl(params.get("media"));
 const speciesId = params.get("species_id")
 
 const STORAGE_KEY = `video_downloaded_species_${speciesId}`
