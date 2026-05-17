@@ -6,6 +6,8 @@ import {
   Typography,
   CircularProgress,
   Divider,
+  Chip,
+  Alert,
 } from "@mui/material";
 
 import PeopleIcon from "@mui/icons-material/People";
@@ -14,6 +16,10 @@ import LoginIcon from "@mui/icons-material/Login";
 import TimerIcon from "@mui/icons-material/Timer";
 import SpaIcon from "@mui/icons-material/Spa";
 import ImageIcon from "@mui/icons-material/Image";
+import WarningIcon from "@mui/icons-material/Warning";
+import InsightsIcon from "@mui/icons-material/Insights";
+import StarIcon from "@mui/icons-material/Star";
+
 import { adminFetch } from "../utils/adminFetch";
 import { translations } from "../translations";
 import LanguageToggle from "../Components/LanguageToggle";
@@ -45,13 +51,30 @@ type UserAnalytics = {
   name: string;
   role: string;
   is_active: boolean;
-  login_count: number;
-  total_duration: number;
-  average_duration: number;
+  login_count: number | null;
+  total_duration: number | null;
+  average_duration: number | null;
   last_login: string | null;
 };
 
 const API_URL = import.meta.env.VITE_API_BASE;
+
+function safeNumber(value: number | null | undefined): number {
+  return typeof value === "number" ? value : 0;
+}
+
+function formatLastLogin(lastLogin: string | null): string {
+  if (!lastLogin) return "Never logged in";
+  return new Date(lastLogin).toLocaleString();
+}
+
+function getActivityLabel(user: UserAnalytics): string {
+  const loginCount = safeNumber(user.login_count);
+
+  if (loginCount === 0) return "No Activity";
+  if (loginCount < 3) return "Low Activity";
+  return "Active User";
+}
 
 export default function Analytics() {
   const { lang, setLang } = useLanguage();
@@ -61,6 +84,7 @@ export default function Analytics() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [users, setUsers] = useState<UserAnalytics[]>([]);
   const [loading, setLoading] = useState(true);
+  const [apiWarning, setApiWarning] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -68,8 +92,33 @@ export default function Analytics() {
       adminFetch(`${API_URL}/analytics/users`).then((res) => res.json()),
     ])
       .then(([overviewData, userData]) => {
-        setOverview(overviewData);
-        setUsers(userData);
+        if (overviewData && !overviewData.error) {
+          setOverview(overviewData);
+        } else {
+          setOverview(null);
+          setApiWarning(
+            "Some analytics data could not be loaded because the backend returned an error."
+          );
+          console.error("Overview API error:", overviewData);
+        }
+
+        if (Array.isArray(userData)) {
+          setUsers(userData);
+        } else {
+          setUsers([]);
+          setApiWarning(
+            "User activity data could not be loaded because the backend returned an error."
+          );
+          console.error("Users API error:", userData);
+        }
+      })
+      .catch((error) => {
+        setOverview(null);
+        setUsers([]);
+        setApiWarning(
+          "Analytics data could not be loaded. Please check the backend API connection."
+        );
+        console.error("Analytics API failed:", error);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -97,6 +146,14 @@ export default function Analytics() {
     { date: "Thu", logins: 3 },
     { date: "Fri", logins: 5 },
   ];
+
+  const sortedUsers = [...users].sort(
+    (a, b) => safeNumber(b.login_count) - safeNumber(a.login_count)
+  );
+
+  const mostActiveUser = sortedUsers.length > 0 ? sortedUsers[0] : null;
+  const usersWithNoLogin = users.filter((user) => safeNumber(user.login_count) === 0).length;
+  const inactiveUsers = users.filter((user) => !user.is_active).length;
 
   return (
     <Box
@@ -159,7 +216,7 @@ export default function Analytics() {
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(320px, 1fr))"
         gap={3}
-        mb={6}
+        mb={2}
       >
         <Card
           elevation={0}
