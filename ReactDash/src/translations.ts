@@ -776,5 +776,7 @@ somethingWentWrong: {
   en: "Something went wrong. Please try again.",
   tet: "Iha problema ida. Favor tenta fali."
 }
+
+
  
 };
