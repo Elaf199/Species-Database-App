@@ -309,7 +309,7 @@ export default function Analytics() {
   
               <Typography>{t("logins")}: {user.login_count}</Typography>
               <Typography>{t("totalDuration")}: {user.total_duration} min</Typography>
-              <Typography>{t("avgDuration")}: {user.average_duration.toFixed(1)} min</Typography>
+              <Typography>{t("avgDuration")}: {(user.average_duration ?? 0).toFixed(1)} min</Typography>
   
               <Typography>
                 {t("lastLogin")}:{" "}
