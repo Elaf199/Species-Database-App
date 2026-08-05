@@ -85,6 +85,9 @@ export default function MainTableSelectTetum({ onRowSelect, lang }: MainTablePro
         rows={species}
         columns={columns}
         getRowId={(row) => row.species_id}
+        localeText={{
+          noRowsLabel: t("noRows"),
+        }}
         initialState={{
           pagination: { paginationModel },
           sorting: {

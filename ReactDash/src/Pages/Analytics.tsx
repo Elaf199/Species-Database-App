@@ -132,19 +132,19 @@ export default function Analytics() {
   }
 
   const activeUsersTrend = [
-    { date: "Mon", users: 10 },
-    { date: "Tue", users: 11 },
-    { date: "Wed", users: 9 },
-    { date: "Thu", users: 13 },
-    { date: "Fri", users: 14 },
+    { date: t("mon"), users: 10 },
+    { date: t("tue"), users: 11 },
+    { date: t("wed"), users: 9 },
+    { date: t("thu"), users: 13 },
+    { date: t("fri"), users: 14 },
   ];
 
   const loginFrequencyTrend = [
-    { date: "Mon", logins: 2 },
-    { date: "Tue", logins: 4 },
-    { date: "Wed", logins: 1 },
-    { date: "Thu", logins: 3 },
-    { date: "Fri", logins: 5 },
+    { date: t("mon"), logins: 2 },
+    { date: t("tue"), logins: 4 },
+    { date: t("wed"), logins: 1 },
+    { date: t("thu"), logins: 3 },
+    { date: t("fri"), logins: 5 },
   ];
 
   const sortedUsers = [...users].sort(
@@ -182,7 +182,7 @@ export default function Analytics() {
               mb: 1,
             }}
           />
-  
+
           <Typography
             variant="h4"
             fontWeight="bold"
@@ -191,13 +191,13 @@ export default function Analytics() {
             {t("analyticsDashboard")}
           </Typography>
         </Box>
-  
+
       </Box>
-  
+
       <Typography align="center" mb={5} sx={{ color: "#7a9464" }}>
         {t("analyticsDescription")}
       </Typography>
-  
+
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
@@ -211,7 +211,7 @@ export default function Analytics() {
         <StatCard icon={<SpaIcon />} label={t("totalSpecies")} value={overview?.total_species} />
         <StatCard icon={<ImageIcon />} label={t("speciesWithMedia")} value={overview?.species_with_media} />
       </Box>
-  
+
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(320px, 1fr))"
@@ -230,7 +230,7 @@ export default function Analytics() {
             <Typography variant="h6" align="center" gutterBottom sx={{ color: "#1a2e10", fontWeight: 700 }}>
               {t("activeUsersOverTime")}
             </Typography>
-  
+
             <Box sx={{ width: "100%", height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={activeUsersTrend}>
@@ -239,13 +239,17 @@ export default function Analytics() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="users" stroke="#4CAF50" />
+                  <Line
+                    type="monotone"
+                    dataKey="users"
+                    stroke="#4CAF50"
+                    name={t("users")} />
                 </LineChart>
               </ResponsiveContainer>
             </Box>
           </CardContent>
         </Card>
-  
+
         <Card
           elevation={0}
           sx={{
@@ -258,7 +262,7 @@ export default function Analytics() {
             <Typography variant="h6" align="center" gutterBottom sx={{ color: "#1a2e10", fontWeight: 700 }}>
               {t("loginFrequency")}
             </Typography>
-  
+
             <Box sx={{ width: "100%", height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={loginFrequencyTrend}>
@@ -267,20 +271,24 @@ export default function Analytics() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="logins" stroke="#1976d2" />
+                  <Line
+                    type="monotone"
+                    dataKey="logins"
+                    stroke="#1976d2"
+                    name={t("logins")} />
                 </LineChart>
               </ResponsiveContainer>
             </Box>
           </CardContent>
         </Card>
       </Box>
-  
+
       <Divider sx={{ mb: 4, borderColor: "#d8edbd" }} />
-  
+
       <Typography variant="h5" mb={3} sx={{ color: "#1a2e10", fontWeight: 700 }}>
         {t("userActivity")}
       </Typography>
-  
+
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
@@ -300,23 +308,40 @@ export default function Analytics() {
               <Typography variant="h6" sx={{ color: "#1a2e10", fontWeight: 700 }}>
                 {user.name}
               </Typography>
-  
+
               <Typography color="text.secondary">
                 {t("role")}: {user.role}
               </Typography>
-  
+
               <Divider sx={{ my: 1, borderColor: "#d8edbd" }} />
-  
-              <Typography>{t("logins")}: {user.login_count}</Typography>
-              <Typography>{t("totalDuration")}: {user.total_duration} min</Typography>
-              <Typography>{t("avgDuration")}: {user.average_duration.toFixed(1)} min</Typography>
-  
+
+              <Typography>
+                {t("logins")}: {user.login_count}
+              </Typography>
+
+              <Typography>
+                {t("totalDuration")}: {user.total_duration} min
+              </Typography>
+
+              <Typography>
+                {t("avgDuration")}:{" "}
+                {user.average_duration != null
+                  ? user.average_duration.toFixed(1)
+                  : "-"}{" "}
+                min
+              </Typography>
+
               <Typography>
                 {t("lastLogin")}:{" "}
-                {user.last_login ? new Date(user.last_login).toLocaleString() : "—"}
+                {user.last_login
+                  ? new Date(user.last_login).toLocaleString()
+                  : "—"}
               </Typography>
-  
-              <Typography mt={1} color={user.is_active ? "success.main" : "error.main"}>
+
+              <Typography
+                mt={1}
+                color={user.is_active ? "success.main" : "error.main"}
+              >
                 {user.is_active ? t("active") : t("inactive")}
               </Typography>
             </CardContent>
