@@ -59,11 +59,6 @@ export const translations = {
     tet: "Praga",
   },
 
-  search: {
-    en: "Search",
-    tet: "Buka",
-  },
-
   filter: {
     en: "Filter",
     tet: "Filtru",
@@ -136,7 +131,7 @@ export const translations = {
 
   addExcel: {
     en: "Upload Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   uploadTitle: {
@@ -216,7 +211,7 @@ export const translations = {
 
   uploadExcel: {
     en: "Upload Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   actions: {
@@ -691,7 +686,7 @@ export const translations = {
 
   uploadFromExcel: {
     en: "Upload from Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   auditFeature: {
@@ -775,7 +770,80 @@ adminLoginFailed: {
 somethingWentWrong: {
   en: "Something went wrong. Please try again.",
   tet: "Iha problema ida. Favor tenta fali."
-}
+},
+
+noRows: {
+  en: "No rows",
+  tet: "La iha dadus"
+},
+
+rowsPerPage: {
+  en: "Rows per page",
+  tet: "Linia kada pajina"
+},
+search: {
+  en: "Search species, type, alt text...",
+  tet: "Buka espésie, tipu, testu alternatívu...",
+},
+items: {
+  en: "items",
+  tet: "item",
+},
+
+images: {
+  en: "images",
+  tet: "imajen",
+},
+
+videos: {
+  en: "videos",
+  tet: "vídeu",
+},
+noFileSelected: {
+  en: "No file selected",
+  tet: "La hili ficheiru",
+},
+activeUsersOverTime: {
+  en: "Active Users Over Time",
+  tet: "Utilizadór Ativu Iha Tempu",
+},
+loginFrequency: {
+  en: "Login Frequency",
+  tet: "Frequénsia Login",
+},
+mon: {
+  en: "Mon",
+  tet: "Seg",
+},
+
+tue: {
+  en: "Tue",
+  tet: "Tersa",
+},
+
+wed: {
+  en: "Wed",
+  tet: "Kuarta",
+},
+
+thu: {
+  en: "Thu",
+  tet: "Kinta",
+},
+
+fri: {
+  en: "Fri",
+  tet: "Sesta",
+},
+admin: {
+  en: "Admin",
+  tet: "Admin",
+},
+
+signedIn: {
+  en: "Signed in",
+  tet: "Tama ona",
+},
 
 
  
