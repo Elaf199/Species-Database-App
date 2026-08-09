@@ -4,6 +4,11 @@ export const translations = {
     tet: "ID",
   },
 
+  mainMenu: {
+    en: "Main Menu",
+    tet: "Reproduz Menu",
+  },
+
   scientificName: {
     en: "Scientific Name",
     tet: "Naran Sientífiku",
@@ -26,7 +31,7 @@ export const translations = {
 
   habitat: {
     en: "Habitat",
-    tet: "Habitat",
+    tet: "Abitat",
   },
 
   identificationCharacter: {
@@ -116,7 +121,7 @@ export const translations = {
 
   password: {
     en: "Password",
-    tet: "Password",
+    tet: "Liafuan xave",
   },
 
   login: {
@@ -177,11 +182,6 @@ export const translations = {
   success: {
     en: "Success",
     tet: "Sucesso",
-  },
-
-  error: {
-    en: "Error",
-    tet: "Erro",
   },
 
   remove: {
@@ -319,11 +319,6 @@ export const translations = {
     tet: "Upload falla",
   },
 
-  databaseUploadFailed: {
-    en: "Error, database upload failed",
-    tet: "Erro, upload falha",
-  },
-
   cannotBeEmpty: {
     en: "cannot be empty!",
     tet: "la bele mamuk!",
@@ -369,9 +364,29 @@ export const translations = {
     tet: "Kargu",
   },
 
+  inactive: {
+  en: "Inactive",
+  tet: "Inativu",
+  },
+  
   active: {
     en: "Active",
     tet: "Ativu",
+  },
+
+  activityInactive: {
+  en: "Logged Out",
+  tet: "Sai ona",
+  },
+  
+  activityModerate: {
+    en: "Moderate",
+    tet: "Moderadu",
+  },
+  
+  activityActive: {
+    en: "Logged In",
+    tet: "Tama ona",
   },
 
   auth: {
@@ -449,19 +464,14 @@ export const translations = {
     tet: "Labele apaga utilizador",
   },
 
-  networkErrorFetchingUsers: {
-    en: "Network error fetching users",
-    tet: "Erro rede",
-  },
-
   mediaManagement: {
     en: "Media Management",
-    tet: "Jestaun Media",
+    tet: "Jestaun Mídia",
   },
 
   addMedia: {
     en: "Add Media",
-    tet: "Aumenta Media",
+    tet: "Aumenta Mídia",
   },
 
   type: {
@@ -471,7 +481,7 @@ export const translations = {
 
   mediaUrl: {
     en: "Media URL",
-    tet: "URL Media",
+    tet: "URL Mídia",
   },
 
   altText: {
@@ -481,7 +491,7 @@ export const translations = {
 
   failedToLoadMedia: {
     en: "Failed to load media",
-    tet: "Labele karrega media",
+    tet: "Labele karrega mídia",
   },
 
   mediaRequiredFields: {
@@ -494,9 +504,14 @@ export const translations = {
     tet: "Link rejista ona",
   },
 
+  mediaAlreadyRegistered: {
+    en: "This media link is already registered",
+    tet: "Link mídia ne'e rejista ona",
+  },
+
   deleteMediaConfirm: {
-    en: "Delete this media item?",
-    tet: "Apaga media ida ne’e?",
+    en: "Delete this media item ",
+    tet: "Apaga mídia ida ne’e ",
   },
 
   deleteFailed: {
@@ -519,9 +534,9 @@ export const translations = {
     tet: "Relatóriu Auditoria",
   },
 
-  unknownError: {
-    en: "Unknown error",
-    tet: "Erro deskoñesidu",
+  noFileSelected: {
+    en: "No file selected",
+    tet: "Laiha arkivu ne'ebé maka hili",
   },
 
   running: {
@@ -541,7 +556,7 @@ export const translations = {
 
   totalRows: {
     en: "Total rows",
-    tet: "Total liña",
+    tet: "Totál liña",
   },
 
   emptyRows: {
@@ -551,7 +566,7 @@ export const translations = {
 
   totalMissingValues: {
     en: "Total missing values",
-    tet: "Valor falta",
+    tet: "Valór sira ne'ebé laiha totál",
   },
 
   blockers: {
@@ -621,7 +636,7 @@ export const translations = {
 
   totalUsers: {
     en: "Total Users",
-    tet: "Total Utilizador",
+    tet: "Totál Utilizador",
   },
 
   activeUsers: {
@@ -629,9 +644,29 @@ export const translations = {
     tet: "Utilizador Ativu",
   },
 
+  inactiveUsers: {
+    en: "Inactive Users",
+    tet: "Utilizadór Inativu sira",
+  },
+
+  signedAs: {
+    en: "Signed In As",
+    tet: "Rejistu ona hanesan",
+  },
+
+  usersWithNoLogins: {
+    en: "Users With No Logins",
+    tet: "Utilizadór sira ne'ebé laiha Login",
+  },
+
+  mostActiveUser: {
+    en: "Most Active User",
+    tet: "Utilizadór Ativu Liu",
+  },
+
   totalLogins: {
     en: "Total Logins",
-    tet: "Total Login",
+    tet: "Totál Login Sira",
   },
 
   avgSession: {
@@ -641,12 +676,12 @@ export const translations = {
 
   totalSpecies: {
     en: "Total Species",
-    tet: "Total Espésie",
+    tet: "Totál Espésie",
   },
 
   speciesWithMedia: {
     en: "Species with Media",
-    tet: "Espésie ho Media",
+    tet: "Espésie ho Mídia",
   },
 
   userActivity: {
@@ -656,12 +691,22 @@ export const translations = {
 
   logins: {
     en: "Logins",
-    tet: "Login",
+    tet: "Totál Sira",
+  },
+
+  activeUsersOverTime: {
+    en: "Active Users Over Time",
+    tet: "Utilizadór Ativu sira iha tempu",
+  },
+
+  loginFrequency: {
+    en: "Login Frequency",
+    tet: "Frekuénsia Login",
   },
 
   totalDuration: {
     en: "Total Duration",
-    tet: "Durasaun",
+    tet: "Durasaun Totál",
   },
 
   avgDuration: {
@@ -674,11 +719,6 @@ export const translations = {
     tet: "Login Ikus",
   },
 
-  inactive: {
-    en: "Inactive",
-    tet: "La Ativu",
-  },
-
   home: {
     en: "Home",
     tet: "Uma",
@@ -686,6 +726,11 @@ export const translations = {
 
   editExistingEntry: {
     en: "Edit Existing Entry",
+    tet: "Edita Dadus",
+  },
+
+  editEntry: {
+    en: "Edit Entry",
     tet: "Edita Dadus",
   },
 
@@ -711,7 +756,7 @@ export const translations = {
 
   media: {
     en: "Media",
-    tet: "Media",
+    tet: "Mídia",
   },
 
   audit: {
@@ -762,6 +807,11 @@ pests: {
   en: "Pests",
   tet: "Praga sira",
 },
+
+loginSubtitle: {
+    en: "Authorised Administrators Only",
+    tet: "Ba Administradór Autorizadu Deʼit",
+  },
 googleLoginFailed: {
   en: "Google login failed. Please try again.",
   tet: "Login Google la susesu. Favor tenta fali."
@@ -775,8 +825,225 @@ adminLoginFailed: {
 somethingWentWrong: {
   en: "Something went wrong. Please try again.",
   tet: "Iha problema ida. Favor tenta fali."
-}
+},
 
+signInWithGoogle: {
+  en: "Sign In With Google",
+  tet: "Tama ho Google",
+},
 
- 
+showPassword: {
+  en: "Show password",
+  tet: "Hatudu liafuan-segredu",
+},
+
+hidePassword: {
+  en: "Hide password",
+  tet: "Subar liafuan-segredu",
+},
+
+noMedia: {
+  en: "No Media",
+  tet: "Laiha Mídia",
+},
+
+mediaPreview: {
+  en: "Media preview",
+  tet: "Prevía Mídia",
+},
+
+retry: {
+  en: "Retry",
+  tet: "Tenta Fali",
+},
+
+deleteMediaTitle: {
+  en: "Delete Media?",
+  tet: "Apaga Mídia?",
+},
+
+cannotBeUndone: {
+  en: "This cannot be undone.",
+  tet: "Ida ne'e labele fila fali.",
+},
+
+preview: {
+  en: "Preview",
+  tet: "Prevía",
+},
+
+clickToEdit: {
+  en: "Click to edit",
+  tet: "Klik hodi edita",
+},
+
+select: {
+  en: "Select",
+  tet: "Hili",
+},
+
+pasteUrl: {
+  en: "Paste URL",
+  tet: "Kola URL",
+},
+
+items: {
+  en: "items",
+  tet: "item sira",
+},
+
+images: {
+  en: "images",
+  tet: "imajen sira",
+},
+
+videos: {
+  en: "videos",
+  tet: "vídeu sira",
+},
+
+untitled: {
+  en: "Untitled",
+  tet: "La iha titulu",
+},
+
+previewNotAvailable: {
+  en: "Preview not available",
+  tet: "Prevía la disponivel",
+},
+
+close: {
+  en: "Close",
+  tet: "Taka",
+},
+
+noImageFound: {
+  en: "No image found",
+  tet: "Laiha imajen",
+},
+
+loadingImage: {
+  en: "Loading image...",
+  tet: "Karrega imajen...",
+},
+
+englishEntry: {
+  en: "English Entry",
+  tet: "Dadus Inglés",
+},
+
+translatedTetumEntry: {
+  en: "Translated Tetum Entry",
+  tet: "Dadus Tetum Traduzidu",
+},
+
+originalTetumEntry: {
+  en: "Original Tetum Entry",
+  tet: "Dadus Tetum Orijinál",
+},
+
+pleaseCheckFields: {
+  en: "Please check fields to ensure correct translation:",
+  tet: "Favór verifika kampu sira hodi garante tradusaun loos:",
+},
+
+speciesUpdatedSuccessfully: {
+  en: "Species updated successfully!",
+  tet: "Espésie atualiza ho susesu!",
+},
+
+editing: {
+  en: "Editing...",
+  tet: "Edita hela...",
+},
+
+saveChanges: {
+  en: "Save Changes",
+  tet: "Rai Mudansa",
+},
+
+deleting: {
+  en: "Deleting...",
+  tet: "Hamoos hela...",
+},
+
+deleteEntry: {
+  en: "Delete Entry",
+  tet: "Hamoos Dadus",
+},
+
+//
+//Error messages
+//
+
+error: {
+  en: "Error",
+  tet: "Erro",
+},
+
+unknownError: {
+  en: "Unknown error",
+  tet: "Erro deskoñesidu",
+},
+
+networkErrorFetchingUsers: {
+  en: "Network error fetching users",
+  tet: "Erro rede",
+},
+
+errorLoadingTetumRow: {
+  en: "Error loading Tetum row.",
+  tet: "Erru hodi karrega liña Tetum.",
+},
+
+databaseUploadFailed: {
+  en: "Error, database upload failed",
+  tet: "Erro, upload falha",
+},
+
+failedToLoadSpecies: {
+  en: "Failed to load species",
+  tet: "La konsege karrega espésie",
+},
+
+errorMediaRequiredFields: {
+  en: "Please fill in Species Name, Type, and Media URL before saving.",
+  tet: "Favor kompleta Naran Espesie, Tipu, no URL Media molok grava.",
+},
+errorMediaAlreadyRegistered: {
+  en: "This media is already registered.",
+  tet: "Media ida ne'e rejistu ona.",
+},
+errorFailedToLoadMedia: {
+  en: "Failed to load media. Please try again.",
+  tet: "La konsege karega media. Favor tenta fali.",
+},
+errorDeleteFailed: {
+  en: "Could not delete this item. Please try again.",
+  tet: "La konsege hamos item ida ne'e. Favor tenta fali.",
+},
+errorUploadFailed: {
+  en: "Upload failed. Please try again.",
+  tet: "Upload la konsege. Favor tenta fali.",
+},
+errorGeneric: {
+  en: "Something went wrong. Please try again.",
+  tet: "Iha problema. Favor tenta fali.",
+},
+
+pleaseFillInFields: {
+  en: "Please fill in",
+  tet: "Favor kompleta",
+},
+
+errorInvalidMediaUrl: {
+  en: "Please enter a valid Media URL starting with http:// or https://.",
+  tet: "Favor hakerek URL Media validu ne'ebé hahú ho http:// ka https://.",
+},
+
+errorNetwork: {
+  en: "Can't reach the server. Check your connection and try again.",
+  tet: "La bele kontaktu servidor. Verifika ita-boot nia koneksaun no tenta fali.",
+},
+
 };
