@@ -3,9 +3,12 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import tempfile
 import asyncio
+import re
+import requests
 from uploader import process_file, translate_to_tetum
 from supabase import create_client, Client
 from flask_cors import CORS
+from flask import render_template
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -35,6 +38,40 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 print("Supabase URL:", SUPABASE_URL)
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+#### GLOBAL ERROR HANDLERS ####
+# Catches ANY unhandled exception from ANY route and returns clean JSON
+# instead of Flask's default HTML error/traceback page.
+@app.errorhandler(Exception)
+def handle_uncaught_exception(e):
+    from werkzeug.exceptions import HTTPException
+
+    # If it's a proper HTTP exception (404, 405, etc.), keep its real status code
+    if isinstance(e, HTTPException):
+        return jsonify({
+            "error": e.description,
+            "type": type(e).__name__
+        }), e.code
+
+    # Log full traceback to terminal for debugging
+    app.logger.exception("Unhandled exception occurred")
+
+    # Anything else (DB errors, bugs, etc.) -> 500 with the exception message
+    return jsonify({
+        "error": str(e),
+        "type": type(e).__name__
+    }), 500
+
+
+@app.errorhandler(404)
+def handle_404(e):
+    return jsonify({"error": "endpoint not found"}), 404
+
+
+@app.errorhandler(405)
+def handle_405(e):
+    return jsonify({"error": "method not allowed"}), 405
+
+
 #register auth and authz routes
 register_auth_routes(app, supabase)
 
@@ -46,7 +83,118 @@ from media import register_media_routes
 register_media_routes(app, supabase)
 
 
+#startup screen route
+@app.route("/")
+def home():
+       return render_template("index.html")
 
+
+def extract_page_image(html: str):
+    """
+    Looks for a page's 'real' image via Open Graph / Twitter meta tags.
+    Handles content= before or after property=/name= in the tag.
+    """
+    patterns = [
+        r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+        r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, html, re.IGNORECASE)
+        if match:
+            return match.group(1)
+    return None
+
+
+@app.get("/api/resolve-image")
+def resolve_image():
+    """
+    Media URLs can come from many different sources - some are direct image
+    files, others are article/product pages that merely CONTAIN an image.
+    This endpoint accepts any URL and returns the actual image URL to render:
+      - if the URL is already a direct image, returns it unchanged
+      - if it's a webpage, fetches it server-side (avoids browser CORS issues)
+        and extracts the og:image / twitter:image meta tag
+    """
+    target_url = request.args.get("url")
+    if not target_url:
+        return jsonify({"error": "url query param required"}), 400
+
+    try:
+        resp = requests.get(
+            target_url,
+            timeout=6,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; SpeciesDBBot/1.0)"},
+        )
+    except requests.RequestException as e:
+        return jsonify({"error": f"failed to fetch url: {str(e)}"}), 502
+
+    content_type = resp.headers.get("Content-Type", "")
+
+    # already a direct image file
+    if content_type.startswith("image/"):
+        return jsonify({"resolved_url": target_url}), 200
+
+    # otherwise treat as an HTML page and look for its preview image
+    page_image = extract_page_image(resp.text)
+    if page_image:
+        return jsonify({"resolved_url": page_image}), 200
+
+    return jsonify({"error": "could not find an image on this page"}), 404
+
+
+@app.get("/api/health")
+def health_check():
+    """
+    Checks each core table by running a lightweight query against it, plus
+    whether the React frontend dev server is actually reachable.
+    Used by the index.html status dashboard to show what's working / broken.
+    """
+    tables_to_check = [
+        "users",
+        "species_en",
+        "species_tet",
+        "media",
+        "analytics",
+        "changelog",
+        "admin_sessions",
+    ]
+
+    checks = {}
+
+    for table in tables_to_check:
+        try:
+            supabase.table(table).select("*").limit(1).execute()
+            checks[table] = {"status": "ok"}
+        except Exception as e:
+            checks[table] = {"status": "error", "message": str(e)}
+
+    # Frontend check: done server-side (rather than via browser fetch) so
+    # this isn't blocked by CORS - the backend simply tries to reach the
+    # Vite dev server directly over the network.
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
+    try:
+        resp = requests.get(frontend_url, timeout=2)
+        if resp.status_code < 500:
+            checks["frontend"] = {"status": "ok"}
+        else:
+            checks["frontend"] = {
+                "status": "error",
+                "message": f"Frontend responded with status {resp.status_code}",
+            }
+    except requests.RequestException:
+        checks["frontend"] = {
+            "status": "error",
+            "message": f"Could not reach frontend at {frontend_url} - is 'npm run dev:admin' running?",
+        }
+
+    overall = "ok" if all(c["status"] == "ok" for c in checks.values()) else "degraded"
+
+    return jsonify({
+        "overall": overall,
+        "checks": checks
+    }), 200
 
 #supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 #supabase_tetum = create_client(SUPABASE_URL_TETUM, SUPABASE_SERVICE_KEY_TETUM)
