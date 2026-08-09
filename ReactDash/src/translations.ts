@@ -64,11 +64,6 @@ export const translations = {
     tet: "Praga",
   },
 
-  search: {
-    en: "Search",
-    tet: "Buka",
-  },
-
   filter: {
     en: "Filter",
     tet: "Filtru",
@@ -141,7 +136,7 @@ export const translations = {
 
   addExcel: {
     en: "Upload Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   uploadTitle: {
@@ -216,7 +211,7 @@ export const translations = {
 
   uploadExcel: {
     en: "Upload Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   actions: {
@@ -736,7 +731,7 @@ export const translations = {
 
   uploadFromExcel: {
     en: "Upload from Excel",
-    tet: "Upload Excel",
+    tet: "Karga Excel",
   },
 
   auditFeature: {
@@ -970,8 +965,6 @@ deleting: {
 deleteEntry: {
   en: "Delete Entry",
   tet: "Hamoos Dadus",
-},
-
 //
 //Error messages
 //

@@ -1068,7 +1068,7 @@ export default function MediaManager() {
 
         <input
           type="text"
-          placeholder={t("search species, type, alt text...")}
+          placeholder={t("search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
@@ -1166,6 +1166,9 @@ export default function MediaManager() {
           rows={filtered}
           columns={columns}
           getRowId={(row) => row.media_id}
+          localeText={{
+            noRowsLabel: t("noRows"),
+          }}
           loading={loading}
           editMode="row"
           rowHeight={95}
