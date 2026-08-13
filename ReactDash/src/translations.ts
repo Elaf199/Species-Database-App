@@ -654,6 +654,11 @@ export const translations = {
     tet: "Rejistu ona hanesan",
   },
 
+  signedIn: {
+    en: "Signed in",
+    tet: "Tama ona",
+  },
+
   usersWithNoLogins: {
     en: "Users With No Logins",
     tet: "Utilizadór sira ne'ebé laiha Login",

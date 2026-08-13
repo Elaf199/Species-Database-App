@@ -381,7 +381,7 @@ function AccountMenu({
         <div style={styles.dropdown}>
           <div style={styles.dropdownHeader}>
             <p style={styles.dropdownHeaderSub}>{t("signedAs")}</p>
-            <p style={styles.dropdownHeaderTitle}>Admin</p>
+            <p style={styles.dropdownHeaderSub}>{t("signedIn")}</p>
           </div>
           <button
             style={styles.dropdownLogout}
