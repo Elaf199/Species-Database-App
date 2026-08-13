@@ -410,7 +410,7 @@ function SidebarContent({
   const location = useLocation();
   const navigate = useNavigate();
   const { lang } = useLanguage();
-
+  
   const t = React.useCallback(
     (key: TranslationKey) => translations[key][lang],
     [lang]
