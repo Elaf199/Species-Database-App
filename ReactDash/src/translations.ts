@@ -363,7 +363,7 @@ export const translations = {
   en: "Inactive",
   tet: "Inativu",
   },
-  
+
   active: {
     en: "Active",
     tet: "Ativu",
@@ -373,12 +373,12 @@ export const translations = {
   en: "Logged Out",
   tet: "Sai ona",
   },
-  
+
   activityModerate: {
     en: "Moderate",
     tet: "Moderadu",
   },
-  
+
   activityActive: {
     en: "Logged In",
     tet: "Tama ona",
@@ -802,246 +802,247 @@ export const translations = {
   selectedSpecies: {
   en: "Selected Species",
   tet: "Espésie Selecionadu",
-},
-pests: {
+  },
+  pests: {
   en: "Pests",
   tet: "Praga sira",
-},
+  },
 
-loginSubtitle: {
+  loginSubtitle: {
     en: "Authorised Administrators Only",
     tet: "Ba Administradór Autorizadu Deʼit",
   },
-googleLoginFailed: {
+  googleLoginFailed: {
   en: "Google login failed. Please try again.",
   tet: "Login Google la susesu. Favor tenta fali."
-},
+  },
 
-adminLoginFailed: {
+  adminLoginFailed: {
   en: "Admin login failed. Please try again.",
   tet: "Login admin la susesu. Favor tenta fali."
-},
+  },
 
-somethingWentWrong: {
+  somethingWentWrong: {
   en: "Something went wrong. Please try again.",
   tet: "Iha problema ida. Favor tenta fali."
-},
+  },
 
-signInWithGoogle: {
+  signInWithGoogle: {
   en: "Sign In With Google",
   tet: "Tama ho Google",
-},
+  },
 
-showPassword: {
+  showPassword: {
   en: "Show password",
   tet: "Hatudu liafuan-segredu",
-},
+  },
 
-hidePassword: {
+  hidePassword: {
   en: "Hide password",
   tet: "Subar liafuan-segredu",
-},
+  },
 
-noMedia: {
+  noMedia: {
   en: "No Media",
   tet: "Laiha Mídia",
-},
+  },
 
-mediaPreview: {
+  mediaPreview: {
   en: "Media preview",
   tet: "Prevía Mídia",
-},
+  },
 
-retry: {
+  retry: {
   en: "Retry",
   tet: "Tenta Fali",
-},
+  },
 
-deleteMediaTitle: {
+  deleteMediaTitle: {
   en: "Delete Media?",
   tet: "Apaga Mídia?",
-},
+  },
 
-cannotBeUndone: {
+  cannotBeUndone: {
   en: "This cannot be undone.",
   tet: "Ida ne'e labele fila fali.",
-},
+  },
 
-preview: {
+  preview: {
   en: "Preview",
   tet: "Prevía",
-},
+  },
 
-clickToEdit: {
+  clickToEdit: {
   en: "Click to edit",
   tet: "Klik hodi edita",
-},
+  },
 
-select: {
+  select: {
   en: "Select",
   tet: "Hili",
-},
+  },
 
-pasteUrl: {
+  pasteUrl: {
   en: "Paste URL",
   tet: "Kola URL",
-},
+  },
 
-items: {
+  items: {
   en: "items",
   tet: "item sira",
-},
+  },
 
-images: {
+  images: {
   en: "images",
   tet: "imajen sira",
-},
+  },
 
-videos: {
+  videos: {
   en: "videos",
   tet: "vídeu sira",
-},
+  },
 
-untitled: {
+  untitled: {
   en: "Untitled",
   tet: "La iha titulu",
-},
+  },
 
-previewNotAvailable: {
+  previewNotAvailable: {
   en: "Preview not available",
   tet: "Prevía la disponivel",
-},
+  },
 
-close: {
+  close: {
   en: "Close",
   tet: "Taka",
-},
+  },
 
-noImageFound: {
+  noImageFound: {
   en: "No image found",
   tet: "Laiha imajen",
-},
+  },
 
-loadingImage: {
+  loadingImage: {
   en: "Loading image...",
   tet: "Karrega imajen...",
-},
+  },
 
-englishEntry: {
+  englishEntry: {
   en: "English Entry",
   tet: "Dadus Inglés",
-},
+  },
 
-translatedTetumEntry: {
+  translatedTetumEntry: {
   en: "Translated Tetum Entry",
   tet: "Dadus Tetum Traduzidu",
-},
+  },
 
-originalTetumEntry: {
+  originalTetumEntry: {
   en: "Original Tetum Entry",
   tet: "Dadus Tetum Orijinál",
-},
+  },
 
-pleaseCheckFields: {
+  pleaseCheckFields: {
   en: "Please check fields to ensure correct translation:",
   tet: "Favór verifika kampu sira hodi garante tradusaun loos:",
-},
+  },
 
-speciesUpdatedSuccessfully: {
+  speciesUpdatedSuccessfully: {
   en: "Species updated successfully!",
   tet: "Espésie atualiza ho susesu!",
-},
+  },
 
-editing: {
+  editing: {
   en: "Editing...",
   tet: "Edita hela...",
-},
+  },
 
-saveChanges: {
+  saveChanges: {
   en: "Save Changes",
   tet: "Rai Mudansa",
-},
+  },
 
-deleting: {
+  deleting: {
   en: "Deleting...",
   tet: "Hamoos hela...",
-},
+  },
 
-deleteEntry: {
+  deleteEntry: {
   en: "Delete Entry",
   tet: "Hamoos Dadus",
-//
-//Error messages
-//
+  },
+  //
+  //Error messages
+  //
 
-error: {
+  error: {
   en: "Error",
   tet: "Erro",
-},
+  },
 
-unknownError: {
+  unknownError: {
   en: "Unknown error",
   tet: "Erro deskoñesidu",
-},
+  },
 
-networkErrorFetchingUsers: {
+  networkErrorFetchingUsers: {
   en: "Network error fetching users",
   tet: "Erro rede",
-},
+  },
 
-errorLoadingTetumRow: {
+  errorLoadingTetumRow: {
   en: "Error loading Tetum row.",
   tet: "Erru hodi karrega liña Tetum.",
-},
+  },
 
-databaseUploadFailed: {
+  databaseUploadFailed: {
   en: "Error, database upload failed",
   tet: "Erro, upload falha",
-},
+  },
 
-failedToLoadSpecies: {
+  failedToLoadSpecies: {
   en: "Failed to load species",
   tet: "La konsege karrega espésie",
-},
+  },
 
-errorMediaRequiredFields: {
+  errorMediaRequiredFields: {
   en: "Please fill in Species Name, Type, and Media URL before saving.",
   tet: "Favor kompleta Naran Espesie, Tipu, no URL Media molok grava.",
-},
-errorMediaAlreadyRegistered: {
+  },
+  errorMediaAlreadyRegistered: {
   en: "This media is already registered.",
   tet: "Media ida ne'e rejistu ona.",
-},
-errorFailedToLoadMedia: {
+  },
+  errorFailedToLoadMedia: {
   en: "Failed to load media. Please try again.",
   tet: "La konsege karega media. Favor tenta fali.",
-},
-errorDeleteFailed: {
+  },
+  errorDeleteFailed: {
   en: "Could not delete this item. Please try again.",
   tet: "La konsege hamos item ida ne'e. Favor tenta fali.",
-},
-errorUploadFailed: {
+  },
+  errorUploadFailed: {
   en: "Upload failed. Please try again.",
   tet: "Upload la konsege. Favor tenta fali.",
-},
-errorGeneric: {
+  },
+  errorGeneric: {
   en: "Something went wrong. Please try again.",
   tet: "Iha problema. Favor tenta fali.",
-},
+  },
 
-pleaseFillInFields: {
+  pleaseFillInFields: {
   en: "Please fill in",
   tet: "Favor kompleta",
-},
+  },
 
-errorInvalidMediaUrl: {
+  errorInvalidMediaUrl: {
   en: "Please enter a valid Media URL starting with http:// or https://.",
   tet: "Favor hakerek URL Media validu ne'ebé hahú ho http:// ka https://.",
-},
+  },
 
-errorNetwork: {
+  errorNetwork: {
   en: "Can't reach the server. Check your connection and try again.",
   tet: "La bele kontaktu servidor. Verifika ita-boot nia koneksaun no tenta fali.",
-},
+  }
 
 };
