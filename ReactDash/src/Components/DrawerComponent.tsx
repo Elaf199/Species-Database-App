@@ -308,8 +308,8 @@ function AccountMenu({
       {open && (
         <div style={styles.dropdown}>
           <div style={styles.dropdownHeader}>
-            <p style={styles.dropdownHeaderTitle}>Admin</p>
-            <p style={styles.dropdownHeaderSub}>Signed in</p>
+          <p style={styles.dropdownHeaderTitle}>{t("admin")}</p>
+          <p style={styles.dropdownHeaderSub}>{t("signedIn")}</p>
           </div>
           <button
             style={styles.dropdownLogout}
@@ -338,7 +338,7 @@ function SidebarContent({
   const location = useLocation();
   const navigate = useNavigate();
   const { lang } = useLanguage();
-
+  
   const t = React.useCallback(
     (key: TranslationKey) => translations[key][lang],
     [lang]

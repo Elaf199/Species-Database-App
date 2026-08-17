@@ -102,7 +102,7 @@ export default function Audit() {
   flexWrap="wrap"
 >
   <Typography sx={{ color: "#4b5563", fontSize: 14 }}>
-    {file ? file.name : "No file selected"}
+  {file ? file.name : t("noFileSelected")}
   </Typography>
 
   <Button
