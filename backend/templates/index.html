@@ -101,6 +101,20 @@
             background: #eaf6d8;
         }
 
+        /* Shown instead of the link when FRONTEND_URL / CORS_ORIGINS isn't
+           configured for this environment, so there's no dead/broken link. */
+        .links .not-configured {
+            display: inline-flex;
+            align-items: center;
+            color: #9ca3af;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px dashed #d8edbd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: not-allowed;
+        }
+
         /* ---- Health check panel ---- */
         .health-card {
             background: #ffffff;
@@ -250,7 +264,11 @@
                 Backend is running
             </div>
             <div class="links">
-                <a href="http://localhost:5173" target="_blank" rel="noopener">Open Admin Dashboard</a>
+                {% if frontend_url %}
+                <a href="{{ frontend_url }}" target="_blank" rel="noopener">Open Admin Dashboard</a>
+                {% else %}
+                <span class="not-configured" title="CORS_ORIGINS is not set for this environment">Admin Dashboard (not configured)</span>
+                {% endif %}
             </div>
         </div>
 
