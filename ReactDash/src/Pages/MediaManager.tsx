@@ -79,7 +79,7 @@ function useResolvedImageUrl(rawUrl: string, skip: boolean = false) {
     const API_URL = import.meta.env.VITE_API_BASE;
     setResolving(true);
 
-    fetch(`${API_URL}/api/resolve-image?url=${encodeURIComponent(rawUrl)}`)
+    adminFetch(`${API_URL}/api/resolve-image?url=${encodeURIComponent(rawUrl)}`)
       .then((res) => {
         if (!res.ok) throw new Error("resolve failed");
         return res.json();

@@ -168,6 +168,9 @@ def _is_safe_external_url(url: str) -> bool:
 
 @app.get("/api/resolve-image")
 def resolve_image():
+    admin_id, err = get_admin_user(supabase)
+    if err:
+        return jsonify({"error": err[0]}), err[1]
 
     target_url = request.args.get("url")
     if not target_url:
