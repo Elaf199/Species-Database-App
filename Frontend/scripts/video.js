@@ -5,13 +5,19 @@ function getSafeVideoUrl(rawUrl) {
 
         //const allowedHost = "oppcngtkhywxsazeqqet.supabase.co"; -> this is the original DB, if using local DB will not allow access to video
 
-        const validSupabaseHost = /^[a-z0-9]+\.supabase\.co$/i.test(url.hostname); //any similar looking SupaBase DB can be checked (for individual DB testing)
+        const allowedHost = API_CONFIG.SUPABASE_HOST;
+
+        if (url.hostname !== allowedHost) {
+            return null;
+        }
+
+        //const validSupabaseHost = /^[a-z0-9]+\.supabase\.co$/i.test(url.hostname); //any similar looking SupaBase DB can be checked (for individual DB testing)
         //const allowedPath = "/storage/v1/object/public/media/videos/"; //old path before new media uploader
         const allowedPath = "/storage/v1/object/public/species_videos/"; //Changed to new file path based on media upload pipeline
 
         if (url.protocol !== "https:") {return null;}
-        //if (url.hostname !== allowedHost) {return null;}
-        if (!validSupabaseHost) {return null;}
+        if (url.hostname !== allowedHost) {return null;}
+        //if (!validSupabaseHost) {return null;}
         if (!url.pathname.startsWith(allowedPath)) {return null;}
         //Make sure its a video file
         const validVideoFile = /\.(mp4|webm|mov)$/i.test(url.pathname);
