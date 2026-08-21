@@ -85,11 +85,17 @@ jobs:
   deploy:
     needs: validate-repo
     runs-on: ubuntu-latest
-    # deploy is left on manual trigger only. It targets /var/www/your-app and
-    # restarts a pm2 process called your-app, which are the placeholders it
-    # shipped with, and it needs DEPLOY_HOST, DEPLOY_USER and DEPLOY_KEY. Until
-    # someone fills those in it should not fire on a push.
-    if: github.event_name == 'workflow_dispatch'
+    # Parked, deliberately. This job still points at /var/www/your-app and
+    # restarts a pm2 process called your-app, both of which are the placeholder
+    # values it was written with, and it needs DEPLOY_HOST, DEPLOY_USER and
+    # DEPLOY_KEY to exist. Nobody has said where this deploys to.
+    #
+    # It has never run, so this is not a regression, and switching it on
+    # blind would either fail every build or SSH somewhere nobody chose.
+    # Whoever owns deployment should fill in the three secrets and the two
+    # paths below, then change this to:
+    #   if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: false
 
     steps:
       - name: Checkout code
@@ -101,7 +107,7 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm run install:all
 
       - name: Build app
         run: npm run build
