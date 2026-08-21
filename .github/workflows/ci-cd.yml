@@ -15,10 +15,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 3.12 to match backend/Dockerfile and the README. On 3.9 the install
+      # cannot succeed at all, because requirements.txt pins click==8.3.1 and
+      # that needs 3.10 or newer.
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.12'
 
       - name: Install Python dependencies
         run: |
