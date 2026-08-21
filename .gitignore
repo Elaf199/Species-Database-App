@@ -9,3 +9,4 @@ node_modules/
 *-server*.log
 testData.xlsx
 .DS_Store
+capacitor-wrapper/.idea/
