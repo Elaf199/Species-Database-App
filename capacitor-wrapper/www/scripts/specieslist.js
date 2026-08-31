@@ -23,25 +23,52 @@ async function renderSpecies(data) {
     const scientific = species.scientific_name ?? "";
     const common = species.common_name ?? "";
 
-    const thumb = await dataService.getThumbnail(species.species_id)
+    const thumb = await dataService.getThumbnail(species.species_id);
 
+    //Get video state icon if video exists online or is cached
+    const hasVideo = await dataService.hasVideo(species.species_id);
+    let videoIcon = "";
+
+    if (hasVideo) {
+
+      try {
+        const cachedVideo = await getCachedVideoBySpeciesId(species.species_id);
+        const isCached = !!cachedVideo?.blob;
+
+        videoIcon = isCached
+        ? `<img src="Assets/icons/videoCachedIcon.png" class="species-card-video-available" alt="video cached">`
+        : `<img src="Assets/icons/videoCloudIcon.png" class="species-card-video-available" alt="video online">`;
+
+      } catch (err) {console.warn("[SpeciesList] Video cache check failed:", err);}
+      
+    }
+    
 
     html += `
       <div class="species-item" onclick="goToDetail('${id}')">
       ${
         thumb
-        ? `<img src="${thumb}" alt="${scientific}" class="species-card-img">`
+        ? `<img data-thumb="${thumb}" data-species-id="${id}" alt="${scientific}" class="species-card-img cached-thumb">`
         : ``
       }  
-      
+      <div class="species-content">
         <div class="species-text">
           <h3 class="species-name">${scientific}</h3>
           <p class="common-name-species">${common}</p>
         </div>
+        
+          ${videoIcon}
+        </div>
       </div>
     `;
   }
-  speciesList.innerHTML = html
+  speciesList.innerHTML = html;
+  document.querySelectorAll(".cached-thumb").forEach((img) => {
+    const url = img.dataset.thumb;
+    const speciesId = img.dataset.speciesId;
+
+    loadImageWithCache(img, url, speciesId);
+  });
 }
 
 
@@ -51,10 +78,20 @@ function renderNoResults() {
   const speciesList = document.getElementById("species-list");
   if (!speciesList) return;
 
+  const isTetum = window.location.pathname.includes("tetum.html");
+
+  const title = isTetum
+    ? "La hetan rezultadu"
+    : "No results found";
+
+  const message = isTetum
+    ? "Favor verifika ortografia ka buka fali."
+    : "Try checking your spelling or searching again.";
+
   speciesList.innerHTML = `
     <div style="text-align:center; padding:2rem; color:#475569;">
-      <p style="font-size:1.1rem; font-weight:600;">No results found</p>
-      <p style="font-size:0.9rem;">Try checking your spelling or searching again.</p>
+      <p style="font-size:1.1rem; font-weight:600;">${title}</p>
+      <p style="font-size:0.9rem;">${message}</p>
     </div>
   `;
 }
